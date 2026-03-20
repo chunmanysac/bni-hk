@@ -1596,5 +1596,64 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 </script>
   <script src="firebase-sync.js"></script>
+
+  <!-- PWA Install Prompt -->
+<div id="pwa-install-prompt" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:99999;background:linear-gradient(135deg,#01696f,#0c4e54);color:#fff;padding:16px 20px;box-shadow:0 -4px 20px rgba(0,0,0,0.3);font-family:'Noto Sans+HK',sans-serif;">
+  <div style="max-width:480px;margin:0 auto;text-align:center;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <span style="font-size:16px;font-weight:700;">📲 安裝 BNI HK 優惠平台</span>
+      <button onclick="closePwaPrompt()" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:0 4px;">✕</button>
+    </div>
+    <div id="ios-instructions" style="display:none;font-size:13px;line-height:1.6;">
+      <p style="margin:0 0 6px;">將此網站加入主畫面，即可像 App 一樣使用：</p>
+      <p style="margin:0;background:rgba(255,255,255,0.15);border-radius:8px;padding:10px;">1️⃣ 點擊底部 <span style="font-size:18px;">⬆</span><b>（分享按鈕）</b><br>2️⃣ 向下滑動選擇 <b>「加入主畫面」</b><br>3️⃣ 點擊右上角 <b>「新增」</b></p>
+    </div>
+    <div id="android-instructions" style="display:none;">
+      <button id="pwa-install-btn" onclick="installPwa()" style="background:#fff;color:#01696f;border:none;padding:12px 32px;border-radius:25px;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px;">立即安裝 App</button>
+    </div>
+    <div id="default-instructions" style="display:none;font-size:13px;line-height:1.6;">
+      <p style="margin:0;">使用瀏覽器選單將此網站「加入主畫面」即可像 App 一樣使用</p>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  if(localStorage.getItem('pwaPromptDismissed')){
+    var t=parseInt(localStorage.getItem('pwaPromptDismissed'));
+    if(Date.now()-t<86400000)return;
+  }
+  if(window.matchMedia('(display-mode:standalone)').matches||navigator.standalone)return;
+  var prompt=document.getElementById('pwa-install-prompt');
+  var isIos=/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+  var deferredPrompt=null;
+  window.addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault();
+    deferredPrompt=e;
+    document.getElementById('android-instructions').style.display='block';
+    prompt.style.display='block';
+  });
+  if(isIos){
+    document.getElementById('ios-instructions').style.display='block';
+    prompt.style.display='block';
+  } else {
+    setTimeout(function(){
+      if(!deferredPrompt){
+        document.getElementById('default-instructions').style.display='block';
+        prompt.style.display='block';
+      }
+    },2000);
+  }
+  window.installPwa=function(){
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(){deferredPrompt=null;prompt.style.display='none';});
+    }
+  };
+  window.closePwaPrompt=function(){
+    prompt.style.display='none';
+    localStorage.setItem('pwaPromptDismissed',Date.now().toString());
+  };
+})();
+</script>
 </body>
 </html>
