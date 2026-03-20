@@ -516,4 +516,123 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(refreshSellerRatings, 2500);
   })();
 
+  // ===== 7. COUNTDOWN TIMER =====
+  (function initCountdown() {
+    const cdStyle = document.createElement('style');
+    cdStyle.textContent = `
+      .countdown-badge { display:inline-flex; align-items:center; gap:4px; background:linear-gradient(135deg,#cc0000,#ff4444); color:#fff; border-radius:20px; padding:4px 10px; font-size:12px; font-weight:bold; margin-top:6px; }
+      .countdown-badge .cd-icon { font-size:13px; }
+      .countdown-badge .cd-time { font-family:monospace; letter-spacing:1px; }
+      .countdown-badge.cd-urgent { background:linear-gradient(135deg,#ff6600,#ff9900); animation:cdPulse 1s infinite; }
+      .countdown-badge.cd-expired { background:#999; }
+      @keyframes cdPulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+      .offer-card .set-deadline-btn { background:none; border:1px dashed #ccc; color:#999; padding:3px 8px; border-radius:12px; font-size:11px; cursor:pointer; margin-top:4px; display:block; }
+      .offer-card .set-deadline-btn:hover { border-color:#cc0000; color:#cc0000; }
+      .deadline-modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:20000; display:none; align-items:center; justify-content:center; }
+      .deadline-modal-overlay.open { display:flex; }
+      .deadline-modal { background:#fff; border-radius:16px; padding:28px; width:320px; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.3); }
+      .deadline-modal h3 { margin-bottom:16px; font-size:18px; color:#333; }
+      .deadline-modal input[type=datetime-local] { width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:14px; margin-bottom:16px; }
+      .deadline-modal-btns { display:flex; gap:10px; justify-content:center; }
+      .deadline-save-btn { background:#cc0000; color:#fff; border:none; padding:10px 24px; border-radius:8px; font-size:14px; cursor:pointer; }
+      .deadline-cancel-btn { background:#f0f0f0; border:none; padding:10px 20px; border-radius:8px; font-size:14px; cursor:pointer; }
+    `;
+    document.head.appendChild(cdStyle);
+
+    // Deadline modal
+    const dlModal = document.createElement('div');
+    dlModal.className = 'deadline-modal-overlay';
+    dlModal.id = 'deadlineModal';
+    dlModal.innerHTML = `<div class="deadline-modal"><h3>\u8a2d\u5b9a\u512a\u60e0\u622a\u6b62\u6642\u9593<br><small style="font-size:13px;color:#999">Set Offer Deadline</small></h3><input type="datetime-local" id="deadlineInput"/><input type="hidden" id="deadlineTargetKey"/><div class="deadline-modal-btns"><button class="deadline-save-btn" onclick="saveDeadline()"\u5132\u5b58</button><button class="deadline-cancel-btn" onclick="closeDeadlineModal()"\u53d6\u6d88</button></div></div>`;
+    document.body.appendChild(dlModal);
+
+    window.openDeadlineModal = function(key) {
+      document.getElementById('deadlineTargetKey').value = key;
+      const existing = localStorage.getItem('bniDeadline_' + key);
+      if (existing) {
+        const d = new Date(parseInt(existing));
+        const local = new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,16);
+        document.getElementById('deadlineInput').value = local;
+      } else {
+        // Default: 7 days from now
+        const def = new Date(Date.now() + 7*24*60*60*1000);
+        const local = new Date(def.getTime() - def.getTimezoneOffset()*60000).toISOString().slice(0,16);
+        document.getElementById('deadlineInput').value = local;
+      }
+      dlModal.classList.add('open');
+    };
+
+    window.closeDeadlineModal = function() { dlModal.classList.remove('open'); };
+
+    window.saveDeadline = function() {
+      const key = document.getElementById('deadlineTargetKey').value;
+      const val = document.getElementById('deadlineInput').value;
+      if (!val) return alert('\u8acb\u9078\u64c7\u6642\u9593 / Please select a time');
+      const ts = new Date(val).getTime();
+      localStorage.setItem('bniDeadline_' + key, ts);
+      closeDeadlineModal();
+      refreshCountdowns();
+    };
+
+    function formatCountdown(ms) {
+      if (ms <= 0) return null;
+      const totalSec = Math.floor(ms / 1000);
+      const d = Math.floor(totalSec / 86400);
+      const h = Math.floor((totalSec % 86400) / 3600);
+      const m = Math.floor((totalSec % 3600) / 60);
+      const s = totalSec % 60;
+      if (d > 0) return d + '\u5929 ' + String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+      return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    }
+
+    function refreshCountdowns() {
+      document.querySelectorAll('.offer-card').forEach(card => {
+        const titleEl = card.querySelector('.offer-title') || card.querySelector('h3');
+        if (!titleEl) return;
+        const key = encodeURIComponent(titleEl.textContent.trim().substring(0,30));
+        const stored = localStorage.getItem('bniDeadline_' + key);
+        let badge = card.querySelector('.countdown-badge');
+        if (!badge) {
+          badge = document.createElement('div');
+          badge.className = 'countdown-badge';
+          const actions = card.querySelector('.offer-actions') || card.querySelector('.card-body') || card;
+          actions.appendChild(badge);
+        }
+        if (!stored) {
+          badge.style.display = 'none';
+          // Add set-deadline button if not present
+          if (!card.querySelector('.set-deadline-btn')) {
+            const btn = document.createElement('button');
+            btn.className = 'set-deadline-btn';
+            btn.textContent = '+ \u8a2d\u5b9a\u9650\u6642\u512a\u60e0 / Set Deadline';
+            btn.onclick = (e) => { e.stopPropagation(); openDeadlineModal(key); };
+            const actions = card.querySelector('.offer-actions') || card.querySelector('.card-body') || card;
+            actions.appendChild(btn);
+          }
+          return;
+        }
+        const deadline = parseInt(stored);
+        const remaining = deadline - Date.now();
+        if (remaining <= 0) {
+          badge.className = 'countdown-badge cd-expired';
+          badge.innerHTML = '<span class="cd-icon">\u23f0</span><span class="cd-time">\u5df2\u622a\u6b62 / Expired</span>';
+          badge.style.display = 'inline-flex';
+        } else {
+          const urgent = remaining < 3600000; // < 1 hour
+          badge.className = 'countdown-badge' + (urgent ? ' cd-urgent' : '');
+          badge.innerHTML = '<span class="cd-icon">\u23f3</span><span class="cd-time">\u9650\u6642 ' + formatCountdown(remaining) + '</span>';
+          badge.style.display = 'inline-flex';
+          badge.onclick = (e) => { e.stopPropagation(); openDeadlineModal(key); };
+          badge.style.cursor = 'pointer';
+        }
+      });
+    }
+
+    // Update every second
+    setTimeout(() => {
+      refreshCountdowns();
+      setInterval(refreshCountdowns, 1000);
+    }, 3000);
+  })();
+
 }); // end DOMContentLoaded
