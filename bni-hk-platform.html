@@ -1163,6 +1163,7 @@ function showSellerTab(tab){
               <td><div style="display:flex;gap:var(--space-2)">
                 <button class="btn btn-sm btn-ghost" onclick="openOfferEdit('${o.id}')"><i data-lucide="edit-2" style="width:12px;height:12px"></i></button>
                 <button class="btn btn-sm btn-ghost" onclick="toggleOfferStatus('${o.id}')">${o.status==='active'?'下架':'上架'}</button>
+                                    <button class="btn btn-sm btn-ghost" onclick="duplicateOffer('${o.id}')"><i data-lucide="copy" style="width:12px;height:12px"></i></button>
               </div></td>
             </tr>`).join(''):`<tr><td colspan="6" style="text-align:center;color:var(--color-text-muted);padding:var(--space-8)">暫時沒有優惠，按「新增優惠」開始。</td></tr>`}
           </tbody>
@@ -1177,6 +1178,16 @@ function showSellerTab(tab){
         <div style="display:flex;gap:var(--space-3);margin-top:var(--space-6)">
           <button class="btn btn-secondary" onclick="showSellerTab('offers')">取消</button>
           <button class="btn btn-primary" onclick="saveNewOfferFromTab()"><i data-lucide="check" style="width:16px;height:16px"></i> 刊登優惠</button>
+        </div>
+
+          <div style="margin-top:var(--space-8);padding-top:var(--space-6);border-top:1px solid var(--color-divider)">
+          <h3 style="margin-bottom:var(--space-3)">CSV 批量匯入</h3>
+          <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-4)">下載 CSV 範本，填好後上傳即可一次過新增多個優惠。</p>
+          <div style="display:flex;gap:var(--space-3);flex-wrap:wrap">
+            <button class="btn btn-secondary" onclick="downloadCSVTemplate()"><i data-lucide="download" style="width:16px;height:16px"></i> 下載 CSV 範本</button>
+            <label class="btn btn-primary" style="cursor:pointer"><i data-lucide="upload" style="width:16px;height:16px"></i> 上傳 CSV 檔案<input type="file" id="csvFileInput" accept=".csv" onchange="handleCSVUpload(event)" style="display:none"></label>
+          </div>
+          <div id="csvPreview" style="margin-top:var(--space-4)"></div>
         </div>
       </div>`;
     lucide.createIcons();
@@ -1324,6 +1335,75 @@ async function saveNewOfferFromTab(){
   showToast('優惠狀態已更新');
 }
 
+
+        // ===== DUPLICATE OFFER =====
+      function duplicateOffer(offerId){
+        const orig=getOffer(offerId);
+        if(!orig){showToast('找不到優惠','error');return;}
+        const s=state.sellerUser;
+        const dup={
+          id:genId('o'),sellerId:s.id,title:orig.title+' (副本)',desc:orig.desc,
+          image:orig.image,originalPrice:orig.originalPrice,discountedPrice:orig.discountedPrice,
+          discountType:orig.discountType,isCoupon:orig.isCoupon,couponValue:orig.couponValue||0,
+          terms:orig.terms,expiry:orig.expiry,status:'active',views:0,orders:0,
+          createdAt:new Date().toISOString().split('T')[0]
+        };
+        DB.offers.push(dup);
+        s.postCount=(s.postCount||0)+1;
+        showSellerTab('offers');
+        showToast('優惠已複製！請編輯副本資料。','success');
+        try{fbCreateOffer(dup);}catch(e){console.warn('Firestore dup sync:',e);}
+      }
+
+      // ===== CSV TEMPLATE DOWNLOAD =====
+      function downloadCSVTemplate(){
+        const header='優惠標題,詳細描述,圖片網址,原價,優惠價,折扣類別(90/80/70/60/coupon),是否現金券(true/false),條款及細則,截止日期(YYYY-MM-DD)';
+        const sample='示範產品名稱,產品詳細描述...,https://picsum.photos/600/450,1000,800,80,false,每人限購一件,2026-12-31';
+        const csv='\uFEFF'+header+'\n'+sample+'\n';
+        const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');
+        a.href=url;a.download='bni-offers-template.csv';a.click();
+        URL.revokeObjectURL(url);
+        showToast('CSV 範本已下載','success');
+      }
+
+      // ===== CSV UPLOAD & PARSE =====
+      function handleCSVUpload(event){
+        const file=event.target.files[0];
+        if(!file){return;}
+        const reader=new FileReader();
+        reader.onload=function(e){
+          const text=e.target.result;
+          const lines=text.split('\n').filter(l=>l.trim());
+          if(lines.length<2){showToast('檔案無有效資料','error');return;}
+          const s=state.sellerUser;
+          let count=0;
+          for(let i=1;i<lines.length;i++){
+            const cols=lines[i].split(',');
+            if(cols.length<9){continue;}
+            const newOffer={
+              id:genId('o'),sellerId:s.id,
+              title:cols[0].trim(),desc:cols[1].trim(),
+              image:cols[2].trim()||'https://picsum.photos/seed/'+Date.now()+i+'/600/450',
+              originalPrice:parseFloat(cols[3])||0,discountedPrice:parseFloat(cols[4])||0,
+              discountType:cols[5].trim()||'90',
+              isCoupon:cols[6].trim().toLowerCase()==='true',
+              terms:cols[7].trim(),expiry:cols[8].trim()||'2026-12-31',
+              status:'active',views:0,orders:0,
+              createdAt:new Date().toISOString().split('T')[0]
+            };
+            DB.offers.push(newOffer);
+            s.postCount=(s.postCount||0)+1;
+            try{fbCreateOffer(newOffer);}catch(e){console.warn('CSV Firestore sync:',e);}
+            count++;
+          }
+          showSellerTab('offers');
+          showToast('成功匯入 '+count+' 個優惠！','success');
+          document.getElementById('csvFileInput').value='';
+        };
+        reader.readAsText(file);
+      }
 // =============================================
 // ADMIN PORTAL
 // =============================================
