@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="zh-HK" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BNI 香港會員專屬優惠平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;700&family=Inter:wght@300..700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+/* ===== DESIGN TOKENS ===== */
+:root,[data-theme="light"]{
+  --color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fbfbf9;
+  --color-surface-offset:#f3f0ec;--color-surface-offset-2:#edeae5;
+  --color-surface-dynamic:#e6e4df;--color-divider:#dcd9d5;--color-border:#d4d1ca;
+  --color-text:#28251d;--color-text-muted:#7a7974;--color-text-faint:#bab9b4;
+  --color-text-inverse:#f9f8f4;
+  --color-primary:#01696f;--color-primary-hover:#0c4e54;--color-primary-active:#0f3638;
+  --color-primary-highlight:#cedcd8;
+  --color-gold:#d19900;--color-gold-hover:#b07a00;--color-gold-highlight:#e9e0c6;
+  --color-success:#437a22;--color-success-hover:#2e5c10;--color-success-highlight:#d4dfcc;
+  --color-error:#a12c7b;--color-error-hover:#7d1e5e;--color-error-highlight:#e0ced7;
+  --color-warning:#964219;--color-warning-highlight:#ddcfc6;
+  --color-orange:#da7101;--color-orange-highlight:#e7d7c4;
+  --radius-sm:.375rem;--radius-md:.5rem;--radius-lg:.75rem;--radius-xl:1rem;--radius-full:9999px;
+  --shadow-sm:0 1px 2px oklch(0.2 0.01 80/0.06);
+  --shadow-md:0 4px 12px oklch(0.2 0.01 80/0.08);
+  --shadow-lg:0 12px 32px oklch(0.2 0.01 80/0.12);
+  --transition-interactive:180ms cubic-bezier(0.16,1,0.3,1);
+  --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;
+  --space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;--space-16:4rem;
+  --text-xs:clamp(0.75rem,.7rem + .25vw,.875rem);
+  --text-sm:clamp(0.875rem,.8rem + .35vw,1rem);
+  --text-base:clamp(1rem,.95rem + .25vw,1.125rem);
+  --text-lg:clamp(1.125rem,1rem + .75vw,1.5rem);
+  --text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
+  --text-2xl:clamp(2rem,1.2rem + 2.5vw,3.5rem);
+  --font-display:'Noto Sans HK','Inter',sans-serif;
+  --font-body:'Noto Sans HK','Inter',sans-serif;
+  --content-default:960px;--content-wide:1200px;
+}
+[data-theme="dark"]{
+  --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;
+  --color-surface-offset:#1d1c1a;--color-surface-offset-2:#22211f;
+  --color-surface-dynamic:#2d2c2a;--color-divider:#262523;--color-border:#393836;
+  --color-text:#cdccca;--color-text-muted:#797876;--color-text-faint:#5a5957;
+  --color-text-inverse:#2b2a28;
+  --color-primary:#4f98a3;--color-primary-hover:#227f8b;--color-primary-active:#1a626b;
+  --color-primary-highlight:#313b3b;
+  --color-gold:#e8af34;--color-gold-hover:#fdc551;--color-gold-highlight:#4d4332;
+  --color-success:#6daa45;--color-success-hover:#4d8f25;--color-success-highlight:#3a4435;
+  --color-error:#d163a7;--color-error-hover:#b9478f;--color-error-highlight:#4c3d46;
+  --color-warning:#bb653b;--color-warning-highlight:#564942;
+  --color-orange:#fdab43;--color-orange-highlight:#564b3e;
+  --shadow-sm:0 1px 2px oklch(0 0 0/.2);
+  --shadow-md:0 4px 12px oklch(0 0 0/.3);
+  --shadow-lg:0 12px 32px oklch(0 0 0/.4);
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme]){
+  --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;
+  --color-surface-offset:#1d1c1a;--color-divider:#262523;--color-border:#393836;
+  --color-text:#cdccca;--color-text-muted:#797876;--color-text-faint:#5a5957;
+  --color-primary:#4f98a3;--color-primary-hover:#227f8b;--color-primary-highlight:#313b3b;
+  --color-gold:#e8af34;--color-success:#6daa45;--color-error:#d163a7;
+  --shadow-sm:0 1px 2px oklch(0 0 0/.2);
+  --shadow-md:0 4px 12px oklch(0 0 0/.3);
+  --shadow-lg:0 12px 32px oklch(0 0 0/.4);
+}}
+
+/* ===== BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:none;text-size-adjust:none;-webkit-font-smoothing:antialiased;scroll-behavior:smooth;scroll-padding-top:var(--space-16)}
+body{min-height:100dvh;line-height:1.6;font-family:var(--font-body);font-size:var(--text-base);color:var(--color-text);background:var(--color-bg)}
+img,picture,video,canvas,svg{display:block;max-width:100%;height:auto}
+input,button,textarea,select{font:inherit;color:inherit}
+h1,h2,h3,h4,h5,h6{text-wrap:balance;line-height:1.2;font-family:var(--font-display)}
+p,li{text-wrap:pretty;max-width:72ch}
+::selection{background:oklch(from var(--color-primary) l c h/.25);color:var(--color-text)}
+:focus-visible{outline:2px solid var(--color-primary);outline-offset:3px;border-radius:var(--radius-sm)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+button{cursor:pointer;background:none;border:none}
+a,button,[role="button"],input,textarea,select{transition:color var(--transition-interactive),background var(--transition-interactive),border-color var(--transition-interactive),box-shadow var(--transition-interactive)}
+
+/* ===== VIEWS ===== */
+.view{display:none!important}
+.view.active{display:block!important}
+.view.active.flex-view{display:flex!important}
+
+/* ===== NAV ===== */
+.topnav{position:sticky;top:0;z-index:100;background:var(--color-surface);border-bottom:1px solid var(--color-border);backdrop-filter:blur(8px)}
+.topnav-inner{max-width:var(--content-wide);margin:0 auto;padding:0 var(--space-4);height:56px;display:flex;align-items:center;gap:var(--space-4)}
+.logo-area{display:flex;align-items:center;gap:var(--space-2);cursor:pointer;flex-shrink:0}
+.logo-svg{width:32px;height:32px}
+.logo-text{font-size:var(--text-sm);font-weight:700;color:var(--color-primary);letter-spacing:-.01em;white-space:nowrap}
+.logo-text span{color:var(--color-text-muted);font-weight:400}
+.nav-links{display:flex;align-items:center;gap:var(--space-1);margin-left:auto}
+.nav-btn{padding:var(--space-2) var(--space-3);border-radius:var(--radius-md);font-size:var(--text-sm);font-weight:500;color:var(--color-text-muted);cursor:pointer;white-space:nowrap;background:none;border:none;transition:all var(--transition-interactive)}
+.nav-btn:hover{color:var(--color-text);background:var(--color-surface-offset)}
+.nav-btn.active{color:var(--color-primary);background:var(--color-primary-highlight)}
+.nav-btn-primary{background:var(--color-primary);color:#fff!important;padding:var(--space-2) var(--space-4)!important}
+.nav-btn-primary:hover{background:var(--color-primary-hover)!important}
+.theme-toggle{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md);color:var(--color-text-muted);flex-shrink:0}
+.theme-toggle:hover{background:var(--color-surface-offset);color:var(--color-text)}
+.hamburger{display:none;width:36px;height:36px;align-items:center;justify-content:center;border-radius:var(--radius-md);color:var(--color-text-muted);margin-left:auto}
+.hamburger:hover{background:var(--color-surface-offset)}
+.mobile-menu{display:none;position:fixed;inset:56px 0 0 0;background:var(--color-surface);z-index:99;padding:var(--space-4);flex-direction:column;gap:var(--space-2);border-top:1px solid var(--color-border)}
+.mobile-menu.open{display:flex}
+.mobile-menu .nav-btn{width:100%;text-align:left;padding:var(--space-3) var(--space-4);border-radius:var(--radius-lg);font-size:var(--text-base)}
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}.logo-text span{display:none}}
+
+/* ===== CONTAINERS ===== */
+.container{max-width:var(--content-wide);margin:0 auto;padding-inline:var(--space-4)}
+.container-default{max-width:var(--content-default);margin:0 auto;padding-inline:var(--space-4)}
+
+/* ===== HERO ===== */
+.hero{padding:var(--space-10) var(--space-4);background:var(--color-surface);border-bottom:1px solid var(--color-border);position:relative;overflow:hidden}
+.hero-inner{max-width:var(--content-wide);margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8);align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:var(--space-2);background:var(--color-primary-highlight);color:var(--color-primary);padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--space-4)}
+.hero h1{font-size:var(--text-xl);font-weight:700;line-height:1.2;margin-bottom:var(--space-4);color:var(--color-text)}
+.hero p{font-size:var(--text-base);color:var(--color-text-muted);margin-bottom:var(--space-6);max-width:48ch}
+.hero-ctas{display:flex;gap:var(--space-3);flex-wrap:wrap}
+.hero-img{border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-lg);aspect-ratio:16/9;background:var(--color-surface-offset)}
+.hero-img img{width:100%;height:100%;object-fit:cover}
+@media(max-width:768px){.hero-inner{grid-template-columns:1fr}.hero-img{display:none}}
+
+/* ===== BUTTONS ===== */
+.btn{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-2) var(--space-5);border-radius:var(--radius-md);font-size:var(--text-sm);font-weight:600;cursor:pointer;border:none;text-decoration:none;transition:all var(--transition-interactive);white-space:nowrap;min-height:40px}
+.btn-primary{background:var(--color-primary);color:#fff}
+.btn-primary:hover{background:var(--color-primary-hover)}
+.btn-secondary{background:var(--color-surface-offset);color:var(--color-text);border:1px solid var(--color-border)}
+.btn-secondary:hover{background:var(--color-surface-dynamic)}
+.btn-ghost{background:none;color:var(--color-text-muted);border:1px solid var(--color-border)}
+.btn-ghost:hover{background:var(--color-surface-offset);color:var(--color-text)}
+.btn-danger{background:var(--color-error);color:#fff}
+.btn-danger:hover{background:var(--color-error-hover)}
+.btn-success{background:var(--color-success);color:#fff}
+.btn-success:hover{background:var(--color-success-hover)}
+.btn-gold{background:var(--color-gold);color:#fff}
+.btn-gold:hover{background:var(--color-gold-hover)}
+.btn-sm{padding:var(--space-1) var(--space-3);font-size:var(--text-xs);min-height:32px}
+.btn-full{width:100%;justify-content:center}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ===== FILTER TABS ===== */
+.filter-section{padding:var(--space-6) 0 var(--space-4);border-bottom:1px solid var(--color-border)}
+.filter-tabs{display:flex;gap:var(--space-2);flex-wrap:wrap}
+.filter-tab{padding:var(--space-2) var(--space-4);border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:500;cursor:pointer;border:1.5px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);transition:all var(--transition-interactive)}
+.filter-tab:hover{border-color:var(--color-primary);color:var(--color-primary)}
+.filter-tab.active{background:var(--color-primary);color:#fff;border-color:var(--color-primary)}
+.filter-tab.coupon-tab{border-color:var(--color-gold)}
+.filter-tab.coupon-tab.active{background:var(--color-gold);color:#fff;border-color:var(--color-gold)}
+
+/* ===== SECTION TITLE ===== */
+.section-header{padding:var(--space-6) 0 var(--space-4);display:flex;align-items:center;justify-content:space-between;gap:var(--space-4)}
+.section-header h2{font-size:var(--text-lg);font-weight:700;color:var(--color-text)}
+.section-header p{font-size:var(--text-sm);color:var(--color-text-muted);margin-top:var(--space-1)}
+
+/* ===== OFFER CARDS GRID ===== */
+.offers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:var(--space-4);padding-bottom:var(--space-12)}
+
+/* ===== OFFER CARD ===== */
+.offer-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);overflow:hidden;cursor:pointer;transition:all var(--transition-interactive);box-shadow:var(--shadow-sm)}
+.offer-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--color-primary-highlight)}
+.offer-card-image{aspect-ratio:4/3;background:var(--color-surface-offset);position:relative;overflow:hidden}
+.offer-card-image img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.offer-card:hover .offer-card-image img{transform:scale(1.04)}
+.discount-badge{position:absolute;top:var(--space-2);left:var(--space-2);background:var(--color-primary);color:#fff;font-size:var(--text-xs);font-weight:700;padding:var(--space-1) var(--space-2);border-radius:var(--radius-md);letter-spacing:.02em}
+.coupon-badge{background:var(--color-gold)}
+.offer-card-body{padding:var(--space-4)}
+.offer-seller{display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-2)}
+.seller-avatar{width:24px;height:24px;border-radius:var(--radius-full);background:var(--color-primary-highlight);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--color-primary);flex-shrink:0}
+.seller-name{font-size:var(--text-xs);color:var(--color-text-muted);font-weight:500}
+.seller-chapter{font-size:var(--text-xs);color:var(--color-text-faint)}
+.offer-title{font-size:var(--text-base);font-weight:600;color:var(--color-text);margin-bottom:var(--space-2);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.offer-desc{font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-3);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.offer-price-row{display:flex;align-items:center;gap:var(--space-3)}
+.price-discounted{font-size:var(--text-lg);font-weight:700;color:var(--color-primary)}
+.price-original{font-size:var(--text-sm);color:var(--color-text-faint);text-decoration:line-through}
+.coupon-value{font-size:var(--text-lg);font-weight:700;color:var(--color-gold)}
+.offer-footer{padding:var(--space-3) var(--space-4);border-top:1px solid var(--color-border);background:var(--color-surface-offset)}
+.offer-footer-row{display:flex;align-items:center;justify-content:space-between}
+.offer-expiry{font-size:var(--text-xs);color:var(--color-text-faint);display:flex;align-items:center;gap:var(--space-1)}
+.offer-expiry svg{width:12px;height:12px}
+
+/* ===== DETAIL VIEW ===== */
+.detail-back{display:flex;align-items:center;gap:var(--space-2);color:var(--color-text-muted);cursor:pointer;font-size:var(--text-sm);padding:var(--space-4) 0;width:fit-content}
+.detail-back:hover{color:var(--color-primary)}
+.detail-grid{display:grid;grid-template-columns:1fr 380px;gap:var(--space-8);padding-bottom:var(--space-12);align-items:start}
+.detail-image{border-radius:var(--radius-xl);overflow:hidden;aspect-ratio:4/3;background:var(--color-surface-offset);box-shadow:var(--shadow-md)}
+.detail-image img{width:100%;height:100%;object-fit:cover}
+.detail-info{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6);box-shadow:var(--shadow-sm)}
+.detail-category{display:flex;gap:var(--space-2);margin-bottom:var(--space-4);flex-wrap:wrap}
+.tag{display:inline-flex;align-items:center;padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:600}
+.tag-primary{background:var(--color-primary-highlight);color:var(--color-primary)}
+.tag-gold{background:var(--color-gold-highlight);color:var(--color-gold)}
+.tag-success{background:var(--color-success-highlight);color:var(--color-success)}
+.detail-title{font-size:var(--text-xl);font-weight:700;margin-bottom:var(--space-4);line-height:1.25}
+.detail-price-block{background:var(--color-surface-offset);border-radius:var(--radius-lg);padding:var(--space-4);margin-bottom:var(--space-6)}
+.detail-price-big{font-size:var(--text-2xl);font-weight:700;color:var(--color-primary);line-height:1}
+.detail-price-original{font-size:var(--text-sm);color:var(--color-text-muted);text-decoration:line-through;margin-top:var(--space-1)}
+.detail-save-row{display:flex;align-items:center;gap:var(--space-2);margin-top:var(--space-2)}
+.save-tag{background:var(--color-success-highlight);color:var(--color-success);padding:var(--space-1) var(--space-2);border-radius:var(--radius-md);font-size:var(--text-xs);font-weight:700}
+.detail-seller-card{border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-4);margin-bottom:var(--space-6)}
+.detail-seller-card h4{font-size:var(--text-sm);font-weight:600;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--space-3)}
+.seller-info-row{display:flex;align-items:center;gap:var(--space-3)}
+.seller-avatar-lg{width:48px;height:48px;border-radius:var(--radius-full);background:var(--color-primary-highlight);display:flex;align-items:center;justify-content:center;font-size:var(--text-base);font-weight:700;color:var(--color-primary);flex-shrink:0}
+.seller-company{font-weight:600;font-size:var(--text-base);color:var(--color-text)}
+.seller-chapter-text{font-size:var(--text-xs);color:var(--color-text-muted);margin-top:2px}
+.detail-payment{background:var(--color-primary-highlight);border-radius:var(--radius-lg);padding:var(--space-4);margin-bottom:var(--space-6)}
+.detail-payment h4{font-size:var(--text-sm);font-weight:600;color:var(--color-primary);margin-bottom:var(--space-3)}
+.payment-row{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--color-text);margin-bottom:var(--space-2)}
+.payment-row svg{color:var(--color-primary);flex-shrink:0}
+.detail-desc-section h3{font-size:var(--text-base);font-weight:600;margin-bottom:var(--space-3)}
+.detail-desc-section p{font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.7}
+.detail-terms{margin-top:var(--space-4);padding:var(--space-3);background:var(--color-warning-highlight);border-radius:var(--radius-md)}
+.detail-terms h5{font-size:var(--text-xs);font-weight:600;color:var(--color-warning);text-transform:uppercase;letter-spacing:.05em;margin-bottom:var(--space-2)}
+.detail-terms p{font-size:var(--text-xs);color:var(--color-text-muted);max-width:unset}
+.qty-row{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-4)}
+.qty-label{font-size:var(--text-sm);font-weight:500}
+.qty-ctrl{display:flex;align-items:center;gap:var(--space-2)}
+.qty-btn{width:32px;height:32px;border-radius:var(--radius-md);background:var(--color-surface-offset);border:1px solid var(--color-border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;transition:all var(--transition-interactive)}
+.qty-btn:hover{background:var(--color-surface-dynamic)}
+.qty-num{font-size:var(--text-base);font-weight:700;min-width:24px;text-align:center}
+@media(max-width:768px){.detail-grid{grid-template-columns:1fr}}
+
+/* ===== FORMS ===== */
+.form-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6);box-shadow:var(--shadow-sm);max-width:520px;margin:0 auto}
+.form-card h2{font-size:var(--text-xl);font-weight:700;margin-bottom:var(--space-2)}
+.form-card p{font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-6)}
+.form-group{margin-bottom:var(--space-4)}
+.form-label{display:block;font-size:var(--text-sm);font-weight:600;color:var(--color-text);margin-bottom:var(--space-2)}
+.form-label span{color:var(--color-error);margin-left:2px}
+.form-input,.form-select,.form-textarea{width:100%;padding:var(--space-3) var(--space-4);border:1.5px solid var(--color-border);border-radius:var(--radius-md);background:var(--color-bg);color:var(--color-text);font-size:var(--text-sm);transition:all var(--transition-interactive)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--color-primary);box-shadow:0 0 0 3px oklch(from var(--color-primary) l c h/.15)}
+.form-textarea{resize:vertical;min-height:100px;font-family:inherit}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4)}
+.form-hint{font-size:var(--text-xs);color:var(--color-text-faint);margin-top:var(--space-1)}
+.form-divider{text-align:center;margin:var(--space-4) 0;position:relative}
+.form-divider::before{content:"";position:absolute;top:50%;left:0;right:0;height:1px;background:var(--color-border)}
+.form-divider span{position:relative;background:var(--color-surface);padding:0 var(--space-3);font-size:var(--text-xs);color:var(--color-text-muted)}
+@media(max-width:480px){.form-row{grid-template-columns:1fr}}
+
+/* ===== SELLER DASHBOARD ===== */
+.dash-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100dvh - 56px);gap:0}
+.dash-sidebar{background:var(--color-surface);border-right:1px solid var(--color-border);padding:var(--space-6) var(--space-3);position:sticky;top:56px;height:calc(100dvh - 56px);overflow-y:auto}
+.dash-sidebar-title{font-size:var(--text-xs);font-weight:600;color:var(--color-text-faint);text-transform:uppercase;letter-spacing:.08em;padding:0 var(--space-3);margin-bottom:var(--space-2)}
+.dash-nav-item{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) var(--space-3);border-radius:var(--radius-md);font-size:var(--text-sm);color:var(--color-text-muted);cursor:pointer;transition:all var(--transition-interactive);margin-bottom:2px}
+.dash-nav-item:hover{background:var(--color-surface-offset);color:var(--color-text)}
+.dash-nav-item.active{background:var(--color-primary-highlight);color:var(--color-primary);font-weight:600}
+.dash-nav-item svg{width:16px;height:16px;flex-shrink:0}
+.dash-content{padding:var(--space-6) var(--space-8);overflow-y:auto}
+.dash-header{margin-bottom:var(--space-6)}
+.dash-header h1{font-size:var(--text-xl);font-weight:700}
+.dash-header p{font-size:var(--text-sm);color:var(--color-text-muted);margin-top:var(--space-1)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:var(--space-4);margin-bottom:var(--space-6)}
+.kpi-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-4);box-shadow:var(--shadow-sm)}
+.kpi-label{font-size:var(--text-xs);color:var(--color-text-muted);font-weight:500;margin-bottom:var(--space-2);display:flex;align-items:center;gap:var(--space-2)}
+.kpi-value{font-size:var(--text-xl);font-weight:700;color:var(--color-text)}
+.kpi-sub{font-size:var(--text-xs);color:var(--color-text-faint);margin-top:var(--space-1)}
+.table-wrap{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-sm)}
+.table-header{padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--color-border);display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);flex-wrap:wrap}
+.table-header h3{font-size:var(--text-base);font-weight:600}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{font-size:var(--text-xs);font-weight:600;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;padding:var(--space-3) var(--space-4);text-align:left;border-bottom:1px solid var(--color-border);background:var(--color-surface-offset)}
+.data-table td{font-size:var(--text-sm);padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--color-divider);vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--color-surface-offset)}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:2px var(--space-2);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:600}
+.status-active{background:var(--color-success-highlight);color:var(--color-success)}
+.status-inactive{background:var(--color-surface-dynamic);color:var(--color-text-muted)}
+.status-pending{background:var(--color-gold-highlight);color:var(--color-gold)}
+.status-paid{background:var(--color-success-highlight);color:var(--color-success)}
+.status-unpaid{background:var(--color-error-highlight);color:var(--color-error)}
+.status-order-new{background:var(--color-primary-highlight);color:var(--color-primary)}
+.status-order-paid{background:var(--color-success-highlight);color:var(--color-success)}
+@media(max-width:768px){
+  .dash-layout{grid-template-columns:1fr}
+  .dash-sidebar{display:none}
+  .dash-content{padding:var(--space-4)}
+  .data-table{font-size:var(--text-xs)}
+  .data-table th,.data-table td{padding:var(--space-2) var(--space-3)}
+}
+
+/* ===== ADMIN ===== */
+.admin-kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--space-4);margin-bottom:var(--space-8)}
+
+/* ===== MODAL ===== */
+.modal-overlay{position:fixed;inset:0;background:oklch(0.1 0 0/.5);z-index:200;display:none;align-items:center;justify-content:center;padding:var(--space-4)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--color-surface);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);width:100%;max-width:560px;max-height:90dvh;overflow-y:auto;animation:modal-in .2s cubic-bezier(0.16,1,0.3,1)}
+@keyframes modal-in{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+.modal-header{padding:var(--space-5) var(--space-6) var(--space-4);border-bottom:1px solid var(--color-border);display:flex;align-items:center;justify-content:space-between}
+.modal-header h3{font-size:var(--text-lg);font-weight:700}
+.modal-close{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md);color:var(--color-text-muted)}
+.modal-close:hover{background:var(--color-surface-offset);color:var(--color-text)}
+.modal-body{padding:var(--space-5) var(--space-6)}
+.modal-footer{padding:var(--space-4) var(--space-6);border-top:1px solid var(--color-border);display:flex;gap:var(--space-3);justify-content:flex-end}
+
+/* ===== TOAST ===== */
+.toast-container{position:fixed;bottom:var(--space-6);right:var(--space-6);z-index:300;display:flex;flex-direction:column;gap:var(--space-2);pointer-events:none}
+.toast{background:var(--color-surface-2);border:1px solid var(--color-border);box-shadow:var(--shadow-lg);border-radius:var(--radius-lg);padding:var(--space-3) var(--space-5);font-size:var(--text-sm);color:var(--color-text);max-width:320px;animation:toast-in .2s cubic-bezier(0.16,1,0.3,1);pointer-events:auto;display:flex;align-items:center;gap:var(--space-3)}
+@keyframes toast-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.toast.success{border-color:var(--color-success);background:var(--color-success-highlight)}
+.toast.error{border-color:var(--color-error);background:var(--color-error-highlight)}
+
+/* ===== PAYMENT CONFIRM ===== */
+.payment-confirm-box{background:var(--color-primary-highlight);border:1.5px solid var(--color-primary);border-radius:var(--radius-xl);padding:var(--space-6);text-align:center;margin-top:var(--space-4)}
+.payment-confirm-box h3{font-size:var(--text-lg);font-weight:700;color:var(--color-primary);margin-bottom:var(--space-3)}
+.payment-confirm-box p{font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-4);max-width:unset}
+.order-ref{display:inline-block;background:var(--color-surface);border-radius:var(--radius-md);padding:var(--space-2) var(--space-4);font-family:monospace;font-size:var(--text-base);font-weight:700;color:var(--color-primary);border:1px solid var(--color-primary);margin-bottom:var(--space-4)}
+
+/* ===== EMPTY STATE ===== */
+.empty-state{display:flex;flex-direction:column;align-items:center;text-align:center;padding:var(--space-16) var(--space-8);color:var(--color-text-muted)}
+.empty-state svg{width:48px;height:48px;margin-bottom:var(--space-4);color:var(--color-text-faint)}
+.empty-state h3{color:var(--color-text);margin-bottom:var(--space-2);font-size:var(--text-lg)}
+.empty-state p{max-width:36ch;margin-bottom:var(--space-6);font-size:var(--text-sm)}
+
+/* ===== SETTINGS CARDS ===== */
+.settings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--space-4);margin-bottom:var(--space-8)}
+.settings-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-5);box-shadow:var(--shadow-sm)}
+.settings-card h4{font-size:var(--text-base);font-weight:600;margin-bottom:var(--space-4);display:flex;align-items:center;gap:var(--space-2)}
+.settings-card h4 svg{color:var(--color-primary);width:18px;height:18px}
+
+/* ===== INLINE TOGGLE ===== */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:var(--space-3) 0;border-bottom:1px solid var(--color-divider)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-label{font-size:var(--text-sm);font-weight:500}
+.toggle-sub{font-size:var(--text-xs);color:var(--color-text-muted)}
+.toggle{position:relative;width:40px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:var(--color-border);border-radius:var(--radius-full);transition:background var(--transition-interactive);cursor:pointer}
+.toggle-slider::before{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;background:#fff;border-radius:var(--radius-full);transition:transform var(--transition-interactive)}
+.toggle input:checked+.toggle-slider{background:var(--color-primary)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(18px)}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="logo-area" onclick="showView('home')">
+      <svg class="logo-svg" viewBox="0 0 32 32" fill="none" aria-label="BNI HK Platform Logo">
+        <circle cx="16" cy="16" r="15" fill="var(--color-primary)" opacity=".15"/>
+        <circle cx="16" cy="16" r="15" stroke="var(--color-primary)" stroke-width="1.5"/>
+        <text x="16" y="21" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="var(--color-primary)">BNI</text>
+      </svg>
+      <span class="logo-text">BNI HK <span>優惠平台</span></span>
+    </div>
+    <div class="nav-links">
+      <button class="nav-btn active" id="nav-home" onclick="showView('home');setActiveNav('nav-home')">優惠首頁</button>
+      <button class="nav-btn" id="nav-seller" onclick="showSellerPortal()">賣家後台</button>
+      <button class="nav-btn" id="nav-admin" onclick="showAdminPortal()">管理員</button>
+      <button class="nav-btn nav-btn-primary" onclick="showBuyerLoginModal()" id="nav-login">買家登入</button>
+      <button class="theme-toggle" data-theme-toggle aria-label="切換主題">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+    <button class="hamburger" onclick="toggleMobileMenu()" aria-label="選單">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="nav-btn" onclick="showView('home');closeMobileMenu()">優惠首頁</button>
+  <button class="nav-btn" onclick="showSellerPortal();closeMobileMenu()">賣家後台</button>
+  <button class="nav-btn" onclick="showAdminPortal();closeMobileMenu()">管理員</button>
+  <button class="nav-btn nav-btn-primary" onclick="showBuyerLoginModal();closeMobileMenu()">買家登入</button>
+</div>
+
+<!-- ===== VIEW: HOME ===== -->
+<div id="view-home" class="view active">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge"><i data-lucide="star" style="width:12px;height:12px"></i> BNI 香港會員專屬</div>
+        <h1>會員專屬優惠<br>一站即搵</h1>
+        <p>香港 BNI 各分會會員精選優惠，九折至現金券，直接聯絡賣家，安全快捷交易。</p>
+        <div class="hero-ctas">
+          <button class="btn btn-primary" onclick="document.getElementById('offers-section').scrollIntoView({behavior:'smooth'})"><i data-lucide="search" style="width:16px;height:16px"></i> 瀏覽所有優惠</button>
+          <button class="btn btn-secondary" onclick="showSellerPortal()"><i data-lucide="store" style="width:16px;height:16px"></i> 成為賣家</button>
+        </div>
+      </div>
+      <div class="hero-img">
+        <img src="https://user-gen-media-assets.s3.amazonaws.com/gemini_images/cfc644c1-353e-41cf-bfde-61223a68464e.png" alt="BNI HK 優惠平台橫幅" width="600" height="338" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter + Offers -->
+  <div class="container" id="offers-section">
+    <div class="filter-section">
+      <div class="filter-tabs" id="filterTabs">
+        <button class="filter-tab active" data-filter="all" onclick="filterOffers('all')">全部優惠</button>
+        <button class="filter-tab" data-filter="90" onclick="filterOffers('90')">🔸 九折 (90%)</button>
+        <button class="filter-tab" data-filter="80" onclick="filterOffers('80')">🔶 八折 (80%)</button>
+        <button class="filter-tab" data-filter="70" onclick="filterOffers('70')">🟠 七折 (70%)</button>
+        <button class="filter-tab" data-filter="60" onclick="filterOffers('60')">🔴 七折以上折扣</button>
+        <button class="filter-tab coupon-tab" data-filter="coupon" onclick="filterOffers('coupon')">🎟 現金券專區</button>
+      </div>
+    </div>
+    <div class="section-header">
+      <div>
+        <h2 id="offers-heading">所有優惠</h2>
+        <p id="offers-count"></p>
+      </div>
+    </div>
+    <div class="offers-grid" id="offersGrid"></div>
+  </div>
+</div>
+
+<!-- ===== VIEW: OFFER DETAIL ===== -->
+<div id="view-detail" class="view">
+  <div class="container">
+    <button class="detail-back" onclick="showView('home')"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> 返回優惠列表</button>
+    <div class="detail-grid" id="detailContent"></div>
+  </div>
+</div>
+
+<!-- ===== VIEW: BUYER CHECKOUT ===== -->
+<div id="view-checkout" class="view">
+  <div class="container-default" style="padding-top:var(--space-8);padding-bottom:var(--space-12)">
+    <button class="detail-back" id="checkoutBack" onclick="showView('detail')"><i data-lucide="arrow-left" style="width:16px;height:16px"></i> 返回詳情</button>
+    <div id="checkoutContent"></div>
+  </div>
+</div>
+
+<!-- ===== VIEW: ORDER CONFIRM ===== -->
+<div id="view-orderconfirm" class="view">
+  <div class="container-default" style="padding-top:var(--space-8);padding-bottom:var(--space-12)">
+    <div id="orderConfirmContent"></div>
+  </div>
+</div>
+
+<!-- ===== VIEW: SELLER PORTAL ===== -->
+<div id="view-seller" class="view">
+  <div id="sellerLoginArea">
+    <div class="container-default" style="padding-top:var(--space-8);padding-bottom:var(--space-12)">
+      <div class="form-card">
+        <h2>賣家登入</h2>
+        <p>BNI 會員賣家專用後台，管理您的優惠刊登。</p>
+        <div class="form-group">
+          <label class="form-label">電郵地址 <span>*</span></label>
+          <input type="email" class="form-input" id="sellerLoginEmail" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">密碼 <span>*</span></label>
+          <input type="password" class="form-input" id="sellerLoginPass" placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary btn-full" onclick="doSellerLogin()">登入後台</button>
+        <div class="form-divider"><span>或</span></div>
+        <button class="btn btn-secondary btn-full" onclick="showSellerRegister()">新賣家註冊</button>
+        <p style="font-size:var(--text-xs);color:var(--color-text-faint);margin-top:var(--space-4);text-align:center">測試帳號：demo@bni.hk / password123</p>
+      </div>
+    </div>
+  </div>
+  <div id="sellerRegisterArea" style="display:none">
+    <div class="container-default" style="padding-top:var(--space-8);padding-bottom:var(--space-12)">
+      <div class="form-card" style="max-width:600px">
+        <h2>賣家註冊</h2>
+        <p>填寫以下資料，成為 BNI 香港優惠平台賣家（登記費：HK$50）。</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">公司名稱 <span>*</span></label>
+            <input type="text" class="form-input" id="reg-company" placeholder="SAC Global Ltd">
+          </div>
+          <div class="form-group">
+            <label class="form-label">聯絡人姓名 <span>*</span></label>
+            <input type="text" class="form-input" id="reg-name" placeholder="Simon Yeung">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">電郵地址 <span>*</span></label>
+            <input type="email" class="form-input" id="reg-email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">聯絡電話</label>
+            <input type="tel" class="form-input" id="reg-phone" placeholder="+852 9XXX XXXX">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">BNI 分會名稱 <span>*</span></label>
+            <select class="form-select" id="reg-chapter">
+              <option value="">請選擇分會</option>
+              <option>BNI Achievers</option>
+              <option>BNI Alpha</option>
+              <option>BNI Champions</option>
+              <option>BNI Diamond</option>
+              <option>BNI Elite</option>
+              <option>BNI Excellence</option>
+              <option>BNI Harmony</option>
+              <option>BNI Innovators</option>
+              <option>BNI Leaders</option>
+              <option>BNI Momentum</option>
+              <option>BNI Peak</option>
+              <option>BNI Pioneer</option>
+              <option>BNI Platinum</option>
+              <option>BNI Power</option>
+              <option>BNI Prestige</option>
+              <option>BNI Prosperity</option>
+              <option>BNI Star</option>
+              <option>BNI Summit</option>
+              <option>BNI Synergy</option>
+              <option>BNI Titan</option>
+              <option>BNI Venture</option>
+              <option>BNI Victory</option>
+              <option>其他</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">BNI 會員編號 <span>*</span></label>
+            <input type="text" class="form-input" id="reg-bniid" placeholder="BNI-HK-XXXX">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">PayMe 收款號碼</label>
+          <input type="text" class="form-input" id="reg-payme" placeholder="+852 9XXX XXXX">
+          <p class="form-hint">買家將透過此號碼向您付款</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label">轉數快 (FPS) 識別碼</label>
+          <input type="text" class="form-input" id="reg-fps" placeholder="手機號碼 / 電郵 / 香港身份證號碼">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">密碼 <span>*</span></label>
+            <input type="password" class="form-input" id="reg-pass" placeholder="至少 8 個字元">
+          </div>
+          <div class="form-group">
+            <label class="form-label">確認密碼 <span>*</span></label>
+            <input type="password" class="form-input" id="reg-pass2" placeholder="再次輸入密碼">
+          </div>
+        </div>
+        <div style="background:var(--color-gold-highlight);border-radius:var(--radius-md);padding:var(--space-3);margin-bottom:var(--space-4)">
+          <p style="font-size:var(--text-xs);color:var(--color-text-muted);max-width:unset"><strong>💰 費用說明：</strong>登記費 HK$50（一次性）＋每月月費 + 每個優惠刊登費 HK$10。MVP 階段費用由管理員手動確認，請完成登記後聯絡我們。</p>
+        </div>
+        <div style="display:flex;gap:var(--space-3)">
+          <button class="btn btn-secondary" onclick="showSellerLogin()">返回登入</button>
+          <button class="btn btn-primary" style="flex:1" onclick="doSellerRegister()">提交申請</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="sellerDashArea" style="display:none">
+    <div class="dash-layout">
+      <aside class="dash-sidebar">
+        <p class="dash-sidebar-title">賣家後台</p>
+        <button class="dash-nav-item active" id="sdash-overview" onclick="showSellerTab('overview')"><i data-lucide="layout-dashboard" style="width:16px;height:16px"></i> 概覽</button>
+        <button class="dash-nav-item" id="sdash-offers" onclick="showSellerTab('offers')"><i data-lucide="tag" style="width:16px;height:16px"></i> 我的優惠</button>
+        <button class="dash-nav-item" id="sdash-addoffer" onclick="showSellerTab('addoffer')"><i data-lucide="plus-circle" style="width:16px;height:16px"></i> 新增優惠</button>
+        <button class="dash-nav-item" id="sdash-orders" onclick="showSellerTab('orders')"><i data-lucide="shopping-bag" style="width:16px;height:16px"></i> 訂單</button>
+        <button class="dash-nav-item" id="sdash-profile" onclick="showSellerTab('profile')"><i data-lucide="user" style="width:16px;height:16px"></i> 我的資料</button>
+        <div style="border-top:1px solid var(--color-border);margin-top:auto;padding-top:var(--space-4)"></div>
+        <button class="dash-nav-item" onclick="doSellerLogout()" style="color:var(--color-error)"><i data-lucide="log-out" style="width:16px;height:16px"></i> 登出</button>
+      </aside>
+      <main class="dash-content" id="sellerDashContent"></main>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VIEW: ADMIN ===== -->
+<div id="view-admin" class="view">
+  <div id="adminLoginArea">
+    <div class="container-default" style="padding-top:var(--space-8);padding-bottom:var(--space-12)">
+      <div class="form-card">
+        <h2>管理員登入</h2>
+        <p>SAC Global Ltd 後台專用。</p>
+        <div class="form-group">
+          <label class="form-label">管理員帳號</label>
+          <input type="text" class="form-input" id="adminUser" placeholder="admin">
+        </div>
+        <div class="form-group">
+          <label class="form-label">密碼</label>
+          <input type="password" class="form-input" id="adminPass" placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary btn-full" onclick="doAdminLogin()">登入</button>
+        <p style="font-size:var(--text-xs);color:var(--color-text-faint);margin-top:var(--space-3);text-align:center">測試：admin / admin123</p>
+      </div>
+    </div>
+  </div>
+  <div id="adminDashArea" style="display:none">
+    <div class="dash-layout">
+      <aside class="dash-sidebar">
+        <p class="dash-sidebar-title">管理後台</p>
+        <button class="dash-nav-item active" id="adash-overview" onclick="showAdminTab('overview')"><i data-lucide="layout-dashboard" style="width:16px;height:16px"></i> 總覽</button>
+        <button class="dash-nav-item" id="adash-sellers" onclick="showAdminTab('sellers')"><i data-lucide="users" style="width:16px;height:16px"></i> 賣家管理</button>
+        <button class="dash-nav-item" id="adash-offers" onclick="showAdminTab('offers')"><i data-lucide="tag" style="width:16px;height:16px"></i> 優惠管理</button>
+        <button class="dash-nav-item" id="adash-orders" onclick="showAdminTab('orders')"><i data-lucide="shopping-bag" style="width:16px;height:16px"></i> 訂單紀錄</button>
+        <button class="dash-nav-item" id="adash-settings" onclick="showAdminTab('settings')"><i data-lucide="settings" style="width:16px;height:16px"></i> 系統設定</button>
+        <div style="border-top:1px solid var(--color-border);margin-top:auto;padding-top:var(--space-4)"></div>
+        <button class="dash-nav-item" onclick="doAdminLogout()" style="color:var(--color-error)"><i data-lucide="log-out" style="width:16px;height:16px"></i> 登出</button>
+      </aside>
+      <main class="dash-content" id="adminDashContent"></main>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+<!-- Buyer Login Modal -->
+<div class="modal-overlay" id="buyerLoginModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>買家登入</h3>
+      <button class="modal-close" onclick="closeModal('buyerLoginModal')"><i data-lucide="x" style="width:16px;height:16px"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">電郵地址</label>
+        <input type="email" class="form-input" id="buyerEmail" placeholder="buyer@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">密碼</label>
+        <input type="password" class="form-input" id="buyerPass" placeholder="••••••••">
+      </div>
+      <p style="font-size:var(--text-xs);color:var(--color-text-faint);margin-bottom:var(--space-4)">測試帳號：buyer@test.com / buyer123</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('buyerLoginModal')">取消</button>
+      <button class="btn btn-primary" onclick="doBuyerLogin()">登入</button>
+    </div>
+  </div>
+</div>
+
+<!-- Offer Edit Modal -->
+<div class="modal-overlay" id="offerEditModal">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-header">
+      <h3 id="offerEditTitle">新增優惠</h3>
+      <button class="modal-close" onclick="closeModal('offerEditModal')"><i data-lucide="x" style="width:16px;height:16px"></i></button>
+    </div>
+    <div class="modal-body" id="offerEditBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('offerEditModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveOffer()">儲存優惠</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Seller Edit Modal -->
+<div class="modal-overlay" id="sellerEditModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>編輯賣家資料</h3>
+      <button class="modal-close" onclick="closeModal('sellerEditModal')"><i data-lucide="x" style="width:16px;height:16px"></i></button>
+    </div>
+    <div class="modal-body" id="sellerEditBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('sellerEditModal')">取消</button>
+      <button class="btn btn-primary" onclick="saveSellerEdit()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ===== JAVASCRIPT DATA ===== -->
+<script>
+// =============================================
+// DATA STORE (in-memory, replaces DB for MVP)
+// =============================================
+const DB = {
+  settings: {
+    registrationFee: 50,
+    monthlyFee: 200,
+    listingFee: 10
+  },
+  sellers: [
+    { id:'s001', company:'SAC Global Ltd', contact:'Simon Yeung', email:'demo@bni.hk', phone:'+852 9123 4567', chapter:'BNI Achievers', bniId:'BNI-HK-0001', payme:'+852 9123 4567', fps:'simon@sac.hk', regFee:'paid', monthFee:'paid', postCount:3, status:'active', joinDate:'2024-01-15' },
+    { id:'s002', company:'HK IT Solutions', contact:'Kenny Chan', email:'kenny@hkit.hk', phone:'+852 9234 5678', chapter:'BNI Champions', bniId:'BNI-HK-0042', payme:'+852 9234 5678', fps:'kenny@hkit.hk', regFee:'paid', monthFee:'unpaid', postCount:2, status:'active', joinDate:'2024-02-20' },
+    { id:'s003', company:'Wellness Studio HK', contact:'Amy Leung', email:'amy@wellness.hk', phone:'+852 9345 6789', chapter:'BNI Diamond', bniId:'BNI-HK-0117', payme:'+852 9345 6789', fps:'amy@wellness.hk', regFee:'paid', monthFee:'paid', postCount:4, status:'active', joinDate:'2024-03-10' },
+    { id:'s004', company:'Legal Eagles HK', contact:'Patrick Wong', email:'patrick@legal.hk', phone:'+852 9456 7890', chapter:'BNI Elite', bniId:'BNI-HK-0233', payme:'+852 9456 7890', fps:'patrick@legal.hk', regFee:'unpaid', monthFee:'unpaid', postCount:0, status:'pending', joinDate:'2025-01-05' },
+  ],
+  offers: [
+    { id:'o001', sellerId:'s001', title:'Robosen 機械人 9 折優惠', desc:'Robosen T9 電競機械人，全港獨家 BNI 會員專屬九折，原廠保養，即買即拎。', image:'https://picsum.photos/seed/robot1/600/450', originalPrice:3999, discountedPrice:3599, discountType:'90', isCoupon:false, terms:'每位會員限購 2 件。優惠期至 2026-06-30。', expiry:'2026-06-30', status:'active', views:142, orders:8, createdAt:'2026-01-10' },
+    { id:'o002', sellerId:'s002', title:'IT 維護服務年度合約 8 折', desc:'全面 IT 外判服務，包括伺服器維護、網絡管理、資訊安全等，BNI 會員享八折優惠。', image:'https://picsum.photos/seed/it2/600/450', originalPrice:12000, discountedPrice:9600, discountType:'80', isCoupon:false, terms:'合約期最短 12 個月。適用於 10 人以下企業。', expiry:'2026-12-31', status:'active', views:89, orders:3, createdAt:'2026-01-15' },
+    { id:'o003', sellerId:'s003', title:'全身排毒療程現金券 $500', desc:'價值 HK$700 全身排毒療程現金券，可用於任何服務。有效期 6 個月，不設兌換。', image:'https://picsum.photos/seed/wellness3/600/450', originalPrice:700, discountedPrice:500, discountType:'coupon', isCoupon:true, couponValue:700, terms:'現金券不可兌換現金。有效期由購買日起 6 個月。', expiry:'2026-09-30', status:'active', views:215, orders:19, createdAt:'2026-02-01' },
+    { id:'o004', sellerId:'s001', title:'玩具批發清倉 7 折', desc:'Disney、Marvel 授權玩具，BNI 會員購買零售價七折，最低起訂數量 5 件。', image:'https://picsum.photos/seed/toys4/600/450', originalPrice:500, discountedPrice:350, discountType:'70', isCoupon:false, terms:'最低購買 5 件。只限現貨。', expiry:'2026-05-31', status:'active', views:67, orders:11, createdAt:'2026-02-10' },
+    { id:'o005', sellerId:'s003', title:'瑜伽月費班 6 折優惠', desc:'每週 3 堂瑜伽課，BNI 會員 6 折月費，首月報名即享。包括所有道具借用。', image:'https://picsum.photos/seed/yoga5/600/450', originalPrice:1200, discountedPrice:720, discountType:'60', isCoupon:false, terms:'優惠適用於新會員，每人限用一次。', expiry:'2026-06-30', status:'active', views:103, orders:7, createdAt:'2026-02-20' },
+    { id:'o006', sellerId:'s002', title:'IT 安全審計服務 HK$500 現金券', desc:'價值 HK$800 的企業資訊安全審計服務現金券，適用於任何 IT 安全評估服務。', image:'https://picsum.photos/seed/security6/600/450', originalPrice:800, discountedPrice:500, discountType:'coupon', isCoupon:true, couponValue:800, terms:'限用一次，不可轉讓。有效期至 2026-12-31。', expiry:'2026-12-31', status:'active', views:44, orders:2, createdAt:'2026-03-01' },
+    { id:'o007', sellerId:'s001', title:'教育科技玩具套裝 8 折', desc:'PlayShifu 全系列 STEM 教育玩具，BNI 會員八折，適合 3-12 歲兒童，送貨上門。', image:'https://picsum.photos/seed/edutech7/600/450', originalPrice:880, discountedPrice:704, discountType:'80', isCoupon:false, terms:'免費送貨（訂單 HK$500 以上）。', expiry:'2026-07-31', status:'active', views:78, orders:5, createdAt:'2026-03-05' },
+    { id:'o008', sellerId:'s003', title:'面部護膚療程 HK$300 現金券', desc:'一小時高效修復面部護膚療程，原價 HK$480，BNI 會員以 HK$300 換購。', image:'https://picsum.photos/seed/facial8/600/450', originalPrice:480, discountedPrice:300, discountType:'coupon', isCoupon:true, couponValue:480, terms:'預約需提前 3 日。不可與其他優惠同用。', expiry:'2026-08-31', status:'active', views:167, orders:24, createdAt:'2026-03-10' },
+  ],
+  orders: [
+    { id:'ord-001', offerId:'o001', buyerName:'Mary Ho', buyerEmail:'mary@test.com', buyerPhone:'+852 9888 7777', qty:1, totalAmount:3599, status:'paid', payRef:'PAYME-20260110-001', screenshot:'', createdAt:'2026-02-01', sellerId:'s001' },
+    { id:'ord-002', offerId:'o003', buyerName:'Peter Lam', buyerEmail:'peter@test.com', buyerPhone:'+852 9777 6666', qty:2, totalAmount:1000, status:'pending', payRef:'', screenshot:'', createdAt:'2026-02-05', sellerId:'s003' },
+    { id:'ord-003', offerId:'o005', buyerName:'Karen Ng', buyerEmail:'karen@test.com', buyerPhone:'+852 9666 5555', qty:1, totalAmount:720, status:'paid', payRef:'FPS-20260220-003', screenshot:'', createdAt:'2026-02-20', sellerId:'s003' },
+    { id:'ord-004', offerId:'o004', buyerName:'Tom Chan', buyerEmail:'tom@test.com', buyerPhone:'+852 9555 4444', qty:5, totalAmount:1750, status:'new', payRef:'', screenshot:'', createdAt:'2026-03-01', sellerId:'s001' },
+    { id:'ord-005', offerId:'o008', buyerName:'Linda Wong', buyerEmail:'linda@test.com', buyerPhone:'+852 9444 3333', qty:1, totalAmount:300, status:'paid', payRef:'PAYME-20260310-005', screenshot:'', createdAt:'2026-03-10', sellerId:'s003' },
+  ],
+  buyers: [
+    { id:'b001', name:'Demo Buyer', email:'buyer@test.com', password:'buyer123' }
+  ]
+};
+
+// =============================================
+// APP STATE
+// =============================================
+let state = {
+  currentOffer: null,
+  sellerUser: null,
+  buyerUser: null,
+  adminLoggedIn: false,
+  filterActive: 'all',
+  editingOfferId: null,
+  editingSellerId: null,
+  sellerTab: 'overview',
+  adminTab: 'overview'
+};
+
+// =============================================
+// UTILITY FUNCTIONS
+// =============================================
+function genId(prefix){ return prefix + Date.now().toString(36).toUpperCase(); }
+function formatPrice(p){ return 'HK$' + Number(p).toLocaleString(); }
+function getDiscountLabel(type,isCoupon){
+  if(isCoupon) return '現金券';
+  const map={'90':'九折','80':'八折','70':'七折','60':'六折以上'};
+  return map[type] || type+'折';
+}
+function getDiscountPct(o){
+  if(o.isCoupon) return Math.round((1-o.discountedPrice/o.originalPrice)*100)+'% off';
+  return (100-parseInt(o.discountType))+'% off';
+}
+function getSeller(id){ return DB.sellers.find(s=>s.id===id); }
+function getOffer(id){ return DB.offers.find(o=>o.id===id); }
+function avatarInitials(name){ return name.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase(); }
+function fmtDate(d){ return d?new Date(d).toLocaleDateString('zh-HK'):'—'; }
+
+function showToast(msg, type=''){
+  const c=document.getElementById('toastContainer');
+  const t=document.createElement('div');
+  t.className='toast '+(type);
+  const icon = type==='success'?'✅':type==='error'?'❌':'ℹ️';
+  t.innerHTML=`<span>${icon}</span><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(()=>t.style.opacity='0',2800);
+  setTimeout(()=>t.remove(),3200);
+}
+
+// =============================================
+// VIEW ROUTING
+// =============================================
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const el=document.getElementById('view-'+name);
+  if(el) el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function setActiveNav(id){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(el) el.classList.add('active');
+}
+
+function toggleMobileMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMobileMenu(){
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// =============================================
+// HOME & FILTER
+// =============================================
+function filterOffers(type){
+  state.filterActive = type;
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector(`[data-filter="${type}"]`).classList.add('active');
+  renderOffers();
+}
+
+function renderOffers(){
+  const grid=document.getElementById('offersGrid');
+  const heading=document.getElementById('offers-heading');
+  const countEl=document.getElementById('offers-count');
+  const f=state.filterActive;
+  let filtered=DB.offers.filter(o=>o.status==='active');
+  const labels={all:'所有優惠',90:'九折優惠（90%）',80:'八折優惠（80%）',70:'七折優惠（70%）',60:'七折以上折扣',coupon:'現金券專區'};
+  heading.textContent=labels[f]||'所有優惠';
+  if(f==='coupon') filtered=filtered.filter(o=>o.isCoupon);
+  else if(f!=='all') filtered=filtered.filter(o=>o.discountType===f);
+  countEl.textContent=`共 ${filtered.length} 個優惠`;
+  if(!filtered.length){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><i data-lucide="search-x" style="width:48px;height:48px"></i><h3>暫時沒有此類優惠</h3><p>請選擇其他分類，或稍後再查看。</p></div>`;
+    lucide.createIcons();return;
+  }
+  grid.innerHTML=filtered.map(o=>renderOfferCard(o)).join('');
+  lucide.createIcons();
+}
+
+function renderOfferCard(o){
+  const seller=getSeller(o.sellerId)||{company:'未知',chapter:'—'};
+  const av=avatarInitials(seller.company);
+  const badgeCls=o.isCoupon?'coupon-badge':'';
+  const badgeTxt=o.isCoupon?'現金券':getDiscountLabel(o.discountType,false);
+  const priceHtml=o.isCoupon
+    ?`<div class="coupon-value">${formatPrice(o.discountedPrice)}</div><div class="price-original">${formatPrice(o.originalPrice)}</div>`
+    :`<div class="price-discounted">${formatPrice(o.discountedPrice)}</div><div class="price-original">${formatPrice(o.originalPrice)}</div>`;
+  return `<div class="offer-card" onclick="showOfferDetail('${o.id}')">
+    <div class="offer-card-image">
+      <img src="${o.image}" alt="${o.title}" width="600" height="450" loading="lazy">
+      <span class="discount-badge ${badgeCls}">${badgeTxt}</span>
+    </div>
+    <div class="offer-card-body">
+      <div class="offer-seller">
+        <div class="seller-avatar">${av}</div>
+        <div><div class="seller-name">${seller.company}</div><div class="seller-chapter">${seller.chapter}</div></div>
+      </div>
+      <div class="offer-title">${o.title}</div>
+      <div class="offer-desc">${o.desc}</div>
+      <div class="offer-price-row">${priceHtml}</div>
+    </div>
+    <div class="offer-footer">
+      <div class="offer-footer-row">
+        <span class="offer-expiry"><i data-lucide="calendar" style="width:12px;height:12px"></i> 截止 ${o.expiry}</span>
+        <span class="tag ${o.isCoupon?'tag-gold':'tag-primary'}" style="font-size:10px">${getDiscountPct(o)}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+// =============================================
+// OFFER DETAIL
+// =============================================
+function showOfferDetail(id){
+  const o=getOffer(id);
+  if(!o) return;
+  state.currentOffer=o;
+  const seller=getSeller(o.sellerId)||{company:'未知',chapter:'—',payme:'—',fps:'—'};
+  const av=avatarInitials(seller.company);
+  const priceHtml=o.isCoupon
+    ?`<div class="detail-price-big coupon-value" style="color:var(--color-gold)">${formatPrice(o.discountedPrice)}</div>
+       <div class="detail-price-original">原價：${formatPrice(o.originalPrice)}</div>`
+    :`<div class="detail-price-big">${formatPrice(o.discountedPrice)}</div>
+       <div class="detail-price-original">原價：${formatPrice(o.originalPrice)}</div>`;
+  const savedAmt=o.originalPrice-o.discountedPrice;
+  document.getElementById('detailContent').innerHTML=`
+    <div>
+      <div class="detail-image"><img src="${o.image}" alt="${o.title}" width="600" height="450" loading="lazy"></div>
+    </div>
+    <div>
+      <div class="detail-info">
+        <div class="detail-category">
+          <span class="tag ${o.isCoupon?'tag-gold':'tag-primary'}">${getDiscountLabel(o.discountType,o.isCoupon)}</span>
+          ${o.isCoupon?'<span class="tag tag-gold">現金券</span>':''}
+          <span class="tag tag-success">有效至 ${o.expiry}</span>
+        </div>
+        <div class="detail-title">${o.title}</div>
+        <div class="detail-price-block">
+          ${priceHtml}
+          <div class="detail-save-row"><span class="save-tag">節省 ${formatPrice(savedAmt)}（${getDiscountPct(o)}）</span></div>
+        </div>
+        <div class="detail-seller-card">
+          <h4>賣家資料</h4>
+          <div class="seller-info-row">
+            <div class="seller-avatar-lg">${av}</div>
+            <div><div class="seller-company">${seller.company}</div><div class="seller-chapter-text">BNI ${seller.chapter}・${seller.contact}</div></div>
+          </div>
+        </div>
+        <div class="detail-payment">
+          <h4>💳 付款方式</h4>
+          ${seller.payme&&seller.payme!=='—'?`<div class="payment-row"><i data-lucide="smartphone" style="width:14px;height:14px"></i> <strong>PayMe：</strong> ${seller.payme}</div>`:''}
+          ${seller.fps&&seller.fps!=='—'?`<div class="payment-row"><i data-lucide="zap" style="width:14px;height:14px"></i> <strong>轉數快：</strong> ${seller.fps}</div>`:''}
+          <p style="font-size:var(--text-xs);color:var(--color-primary);margin-top:var(--space-2)">請建立訂單後，直接向賣家付款。</p>
+        </div>
+        <div class="qty-row">
+          <span class="qty-label">數量：</span>
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <span class="qty-num" id="qtyNum">1</span>
+            <button class="qty-btn" onclick="changeQty(1)">＋</button>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="goToCheckout()"><i data-lucide="shopping-cart" style="width:16px;height:16px"></i> 建立訂單</button>
+      </div>
+      <div style="margin-top:var(--space-4)">
+        <div class="detail-desc-section">
+          <h3>優惠詳情</h3>
+          <p>${o.desc}</p>
+          ${o.terms?`<div class="detail-terms"><h5>條款及細則</h5><p>${o.terms}</p></div>`:''}
+        </div>
+      </div>
+    </div>`;
+  showView('detail');
+  lucide.createIcons();
+}
+
+let currentQty=1;
+function changeQty(d){
+  currentQty=Math.max(1,currentQty+d);
+  const el=document.getElementById('qtyNum');
+  if(el) el.textContent=currentQty;
+}
+
+function goToCheckout(){
+  const o=state.currentOffer;
+  if(!o) return;
+  const seller=getSeller(o.sellerId)||{company:'',payme:'',fps:''};
+  const qty=currentQty;
+  const total=o.discountedPrice*qty;
+  document.getElementById('checkoutContent').innerHTML=`
+    <div style="max-width:560px;margin:0 auto">
+      <h1 style="font-size:var(--text-xl);font-weight:700;margin-bottom:var(--space-6)">建立訂單</h1>
+      <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-5);margin-bottom:var(--space-6);box-shadow:var(--shadow-sm)">
+        <h3 style="font-size:var(--text-base);font-weight:600;margin-bottom:var(--space-4)">訂單摘要</h3>
+        <div style="display:flex;gap:var(--space-4);align-items:center;margin-bottom:var(--space-4)">
+          <img src="${o.image}" alt="${o.title}" width="80" height="60" style="border-radius:var(--radius-md);object-fit:cover;flex-shrink:0">
+          <div><div style="font-weight:600">${o.title}</div><div style="font-size:var(--text-sm);color:var(--color-text-muted)">${seller.company}</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);padding:var(--space-2) 0;border-top:1px solid var(--color-divider)">
+          <span>單價</span><span>${formatPrice(o.discountedPrice)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:var(--text-sm);padding:var(--space-2) 0;border-bottom:1px solid var(--color-divider)">
+          <span>數量</span><span>${qty}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:var(--text-lg);font-weight:700;padding:var(--space-3) 0;color:var(--color-primary)">
+          <span>合計</span><span>${formatPrice(total)}</span>
+        </div>
+      </div>
+      <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-5);margin-bottom:var(--space-6);box-shadow:var(--shadow-sm)">
+        <h3 style="font-size:var(--text-base);font-weight:600;margin-bottom:var(--space-4)">買家資料</h3>
+        <div class="form-group"><label class="form-label">姓名 <span>*</span></label><input type="text" class="form-input" id="co-name" value="${state.buyerUser?state.buyerUser.name:''}" placeholder="您的姓名"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">電郵 <span>*</span></label><input type="email" class="form-input" id="co-email" value="${state.buyerUser?state.buyerUser.email:''}" placeholder="your@email.com"></div>
+          <div class="form-group"><label class="form-label">電話</label><input type="tel" class="form-input" id="co-phone" placeholder="+852 9XXX XXXX"></div>
+        </div>
+        <div class="form-group"><label class="form-label">備註</label><textarea class="form-textarea" id="co-note" placeholder="任何特別要求..."></textarea></div>
+      </div>
+      <div style="background:var(--color-gold-highlight);border:1px solid var(--color-gold);border-radius:var(--radius-xl);padding:var(--space-5);margin-bottom:var(--space-6)">
+        <h3 style="font-size:var(--text-base);font-weight:600;color:var(--color-gold);margin-bottom:var(--space-3)">📋 付款指示</h3>
+        <p style="font-size:var(--text-sm);margin-bottom:var(--space-3);max-width:unset">建立訂單後，請直接向賣家付款：</p>
+        ${seller.payme?`<div style="font-size:var(--text-sm);margin-bottom:var(--space-2)">📱 <strong>PayMe：</strong>${seller.payme}</div>`:''}
+        ${seller.fps?`<div style="font-size:var(--text-sm)">⚡ <strong>轉數快：</strong>${seller.fps}</div>`:''}
+      </div>
+      <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-5);margin-bottom:var(--space-6);box-shadow:var(--shadow-sm)">
+        <h3 style="font-size:var(--text-base);font-weight:600;margin-bottom:var(--space-4)">付款確認（付款後填寫）</h3>
+        <div class="form-group"><label class="form-label">付款參考號碼</label><input type="text" class="form-input" id="co-payref" placeholder="例：PAYME-XXXXXXXX 或 FPS 交易編號"></div>
+        <p style="font-size:var(--text-xs);color:var(--color-text-faint)">付款後請填寫，讓賣家核對。</p>
+      </div>
+      <button class="btn btn-primary btn-full" style="font-size:var(--text-base)" onclick="submitOrder('${o.id}',${qty},${total},'${o.sellerId}')"><i data-lucide="check-circle" style="width:18px;height:18px"></i> 確認建立訂單</button>
+    </div>`;
+  showView('checkout');
+  lucide.createIcons();
+}
+
+function submitOrder(offerId,qty,total,sellerId){
+  const name=document.getElementById('co-name').value.trim();
+  const email=document.getElementById('co-email').value.trim();
+  if(!name||!email){showToast('請填寫姓名及電郵','error');return;}
+  const phone=document.getElementById('co-phone').value.trim();
+  const note=document.getElementById('co-note').value.trim();
+  const payref=document.getElementById('co-payref').value.trim();
+  const ordId=genId('ORD-');
+  const newOrder={id:ordId,offerId,buyerName:name,buyerEmail:email,buyerPhone:phone,note,qty,totalAmount:total,status:payref?'paid':'new',payRef:payref,createdAt:new Date().toISOString().split('T')[0],sellerId};
+  DB.orders.push(newOrder);
+  const seller=getSeller(sellerId)||{payme:'',fps:''};
+  document.getElementById('orderConfirmContent').innerHTML=`
+    <div style="max-width:560px;margin:0 auto;padding:var(--space-8) 0">
+      <div style="text-align:center;margin-bottom:var(--space-8)">
+        <div style="width:64px;height:64px;border-radius:var(--radius-full);background:var(--color-success-highlight);display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-4)">
+          <i data-lucide="check-circle" style="width:32px;height:32px;color:var(--color-success)"></i>
+        </div>
+        <h1 style="font-size:var(--text-xl);font-weight:700;margin-bottom:var(--space-2)">訂單已建立！</h1>
+        <p style="color:var(--color-text-muted)">請完成付款後通知賣家。</p>
+      </div>
+      <div class="payment-confirm-box">
+        <h3>訂單編號</h3>
+        <div class="order-ref">${ordId}</div>
+        <p>請截圖保存此訂單編號，並轉帳 <strong>${formatPrice(total)}</strong> 至賣家：</p>
+        ${seller.payme?`<p style="margin:4px 0;font-size:var(--text-sm);max-width:unset">📱 PayMe：<strong>${seller.payme}</strong></p>`:''}
+        ${seller.fps?`<p style="margin:4px 0;font-size:var(--text-sm);max-width:unset">⚡ 轉數快：<strong>${seller.fps}</strong></p>`:''}
+        <p style="margin-top:var(--space-4);font-size:var(--text-xs);color:var(--color-text-muted);max-width:unset">付款後，請以 WhatsApp 或電郵將付款截圖及訂單編號發給賣家確認。</p>
+      </div>
+      <div style="display:flex;gap:var(--space-3);margin-top:var(--space-6);justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-secondary" onclick="showView('home')">返回首頁</button>
+        <button class="btn btn-primary" onclick="showOfferDetail('${offerId}')">查看優惠詳情</button>
+      </div>
+    </div>`;
+  showView('orderconfirm');
+  lucide.createIcons();
+  showToast('訂單建立成功！','success');
+}
+
+// =============================================
+// BUYER LOGIN
+// =============================================
+function showBuyerLoginModal(){
+  if(state.buyerUser){
+    showToast(`已登入：${state.buyerUser.name}`);return;
+  }
+  openModal('buyerLoginModal');
+}
+function doBuyerLogin(){
+  const email=document.getElementById('buyerEmail').value.trim();
+  const pass=document.getElementById('buyerPass').value;
+  const buyer=DB.buyers.find(b=>b.email===email&&b.password===pass);
+  if(buyer){
+    state.buyerUser=buyer;
+    closeModal('buyerLoginModal');
+    document.getElementById('nav-login').textContent='已登入';
+    showToast('買家登入成功！','success');
+  }else{
+    showToast('帳號或密碼錯誤','error');
+  }
+}
+
+// =============================================
+// SELLER PORTAL
+// =============================================
+function showSellerPortal(){
+  showView('seller');
+  setActiveNav('nav-seller');
+  if(state.sellerUser){
+    document.getElementById('sellerLoginArea').style.display='none';
+    document.getElementById('sellerRegisterArea').style.display='none';
+    document.getElementById('sellerDashArea').style.display='block';
+    showSellerTab(state.sellerTab);
+  }else{
+    showSellerLogin();
+  }
+}
+function showSellerLogin(){
+  document.getElementById('sellerLoginArea').style.display='block';
+  document.getElementById('sellerRegisterArea').style.display='none';
+  document.getElementById('sellerDashArea').style.display='none';
+}
+function showSellerRegister(){
+  document.getElementById('sellerLoginArea').style.display='none';
+  document.getElementById('sellerRegisterArea').style.display='block';
+  document.getElementById('sellerDashArea').style.display='none';
+}
+function doSellerLogin(){
+  const email=document.getElementById('sellerLoginEmail').value.trim();
+  const pass=document.getElementById('sellerLoginPass').value;
+  if(email==='demo@bni.hk'&&pass==='password123'){
+    state.sellerUser=DB.sellers.find(s=>s.email==='demo@bni.hk');
+    document.getElementById('sellerLoginArea').style.display='none';
+    document.getElementById('sellerDashArea').style.display='block';
+    showSellerTab('overview');
+    showToast('歡迎回來，'+state.sellerUser.contact+'！','success');
+  }else{
+    showToast('帳號或密碼錯誤','error');
+  }
+}
+function doSellerLogout(){
+  state.sellerUser=null;
+  showSellerLogin();
+  showToast('已登出');
+}
+function doSellerRegister(){
+  const company=document.getElementById('reg-company').value.trim();
+  const name=document.getElementById('reg-name').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const chapter=document.getElementById('reg-chapter').value;
+  const bniId=document.getElementById('reg-bniid').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  const pass2=document.getElementById('reg-pass2').value;
+  if(!company||!name||!email||!chapter||!bniId||!pass){showToast('請填寫所有必填欄位','error');return;}
+  if(pass!==pass2){showToast('兩次密碼不相符','error');return;}
+  const newSeller={
+    id:genId('s'),company,contact:name,email,phone:document.getElementById('reg-phone').value.trim(),
+    chapter,bniId,payme:document.getElementById('reg-payme').value.trim(),
+    fps:document.getElementById('reg-fps').value.trim(),
+    regFee:'unpaid',monthFee:'unpaid',postCount:0,status:'pending',joinDate:new Date().toISOString().split('T')[0],_pass:pass
+  };
+  DB.sellers.push(newSeller);
+  state.sellerUser=newSeller;
+  document.getElementById('sellerRegisterArea').style.display='none';
+  document.getElementById('sellerDashArea').style.display='block';
+  showSellerTab('overview');
+  showToast('註冊成功！請等待管理員審核。','success');
+}
+
+function showSellerTab(tab){
+  state.sellerTab=tab;
+  document.querySelectorAll('[id^="sdash-"]').forEach(el=>el.classList.remove('active'));
+  const navEl=document.getElementById('sdash-'+tab);
+  if(navEl) navEl.classList.add('active');
+  const content=document.getElementById('sellerDashContent');
+  const s=state.sellerUser;
+  if(!s){return;}
+  const myOffers=DB.offers.filter(o=>o.sellerId===s.id);
+  const myOrders=DB.orders.filter(o=>o.sellerId===s.id);
+  if(tab==='overview'){
+    content.innerHTML=`
+      <div class="dash-header"><h1>歡迎回來，${s.contact}</h1><p>${s.company} · ${s.chapter}</p></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-label"><i data-lucide="tag" style="width:14px;height:14px"></i> 已刊登優惠</div><div class="kpi-value">${myOffers.filter(o=>o.status==='active').length}</div><div class="kpi-sub">共 ${myOffers.length} 個</div></div>
+        <div class="kpi-card"><div class="kpi-label"><i data-lucide="shopping-bag" style="width:14px;height:14px"></i> 訂單總數</div><div class="kpi-value">${myOrders.length}</div><div class="kpi-sub">${myOrders.filter(o=>o.status==='paid').length} 已付款</div></div>
+        <div class="kpi-card"><div class="kpi-label"><i data-lucide="eye" style="width:14px;height:14px"></i> 總瀏覽數</div><div class="kpi-value">${myOffers.reduce((a,o)=>a+(o.views||0),0)}</div><div class="kpi-sub">所有優惠合計</div></div>
+        <div class="kpi-card"><div class="kpi-label"><i data-lucide="credit-card" style="width:14px;height:14px"></i> 登記費狀態</div><div class="kpi-value"><span class="status-badge ${s.regFee==='paid'?'status-paid':'status-unpaid'}">${s.regFee==='paid'?'已付':'待付'}</span></div><div class="kpi-sub">HK$${DB.settings.registrationFee}</div></div>
+      </div>
+      <div style="display:flex;gap:var(--space-3);margin-bottom:var(--space-6);flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="showSellerTab('addoffer')"><i data-lucide="plus" style="width:16px;height:16px"></i> 新增優惠</button>
+        <button class="btn btn-secondary" onclick="showSellerTab('offers')">查看我的優惠</button>
+      </div>`;
+    lucide.createIcons();
+  } else if(tab==='offers'){
+    content.innerHTML=`
+      <div class="dash-header"><h1>我的優惠</h1><p>管理您所有刊登的優惠。</p></div>
+      <div style="margin-bottom:var(--space-4)"><button class="btn btn-primary btn-sm" onclick="showSellerTab('addoffer')"><i data-lucide="plus" style="width:14px;height:14px"></i> 新增優惠</button></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>優惠名稱</th><th>折扣類別</th><th>優惠價</th><th>狀態</th><th>瀏覽/訂單</th><th>操作</th></tr></thead>
+          <tbody>${myOffers.length?myOffers.map(o=>`
+            <tr>
+              <td><strong>${o.title}</strong></td>
+              <td><span class="tag ${o.isCoupon?'tag-gold':'tag-primary'}" style="font-size:10px">${getDiscountLabel(o.discountType,o.isCoupon)}</span></td>
+              <td>${formatPrice(o.discountedPrice)}</td>
+              <td><span class="status-badge ${o.status==='active'?'status-active':'status-inactive'}">${o.status==='active'?'上架':'下架'}</span></td>
+              <td style="font-variant-numeric:tabular-nums">${o.views||0} / ${o.orders||0}</td>
+              <td><div style="display:flex;gap:var(--space-2)">
+                <button class="btn btn-sm btn-ghost" onclick="openOfferEdit('${o.id}')"><i data-lucide="edit-2" style="width:12px;height:12px"></i></button>
+                <button class="btn btn-sm btn-ghost" onclick="toggleOfferStatus('${o.id}')">${o.status==='active'?'下架':'上架'}</button>
+              </div></td>
+            </tr>`).join(''):`<tr><td colspan="6" style="text-align:center;color:var(--color-text-muted);padding:var(--space-8)">暫時沒有優惠，按「新增優惠」開始。</td></tr>`}
+          </tbody>
+        </table>
+      </div>`;
+    lucide.createIcons();
+  } else if(tab==='addoffer'){
+    content.innerHTML=`
+      <div class="dash-header"><h1>新增優惠</h1><p>新增一個 BNI 會員專屬優惠（每個 HK$${DB.settings.listingFee} 刊登費）。</p></div>
+      <div style="max-width:600px">
+        ${renderOfferForm(null)}
+        <div style="display:flex;gap:var(--space-3);margin-top:var(--space-6)">
+          <button class="btn btn-secondary" onclick="showSellerTab('offers')">取消</button>
+          <button class="btn btn-primary" onclick="saveNewOfferFromTab()"><i data-lucide="check" style="width:16px;height:16px"></i> 刊登優惠</button>
+        </div>
+      </div>`;
+    lucide.createIcons();
+  } else if(tab==='orders'){
+    content.innerHTML=`
+      <div class="dash-header"><h1>訂單管理</h1><p>查看所有買家訂單。</p></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>訂單編號</th><th>優惠</th><th>買家</th><th>金額</th><th>狀態</th><th>付款參考</th><th>日期</th></tr></thead>
+          <tbody>${myOrders.length?myOrders.map(ord=>{const o=getOffer(ord.offerId)||{title:'已刪除'};return`
+            <tr>
+              <td style="font-family:monospace;font-size:var(--text-xs)">${ord.id}</td>
+              <td>${o.title}</td>
+              <td><div>${ord.buyerName}</div><div style="font-size:var(--text-xs);color:var(--color-text-muted)">${ord.buyerEmail}</div></td>
+              <td style="font-weight:600;color:var(--color-primary)">${formatPrice(ord.totalAmount)}</td>
+              <td><span class="status-badge ${ord.status==='paid'?'status-order-paid':ord.status==='new'?'status-order-new':'status-pending'}">${ord.status==='paid'?'已付款':ord.status==='new'?'新訂單':'待確認'}</span></td>
+              <td style="font-size:var(--text-xs);font-family:monospace">${ord.payRef||'—'}</td>
+              <td style="font-size:var(--text-xs)">${fmtDate(ord.createdAt)}</td>
+            </tr>`}).join(''):`<tr><td colspan="7" style="text-align:center;color:var(--color-text-muted);padding:var(--space-8)">暫時沒有訂單。</td></tr>`}
+          </tbody>
+        </table>
+      </div>`;
+    lucide.createIcons();
+  } else if(tab==='profile'){
+    content.innerHTML=`
+      <div class="dash-header"><h1>我的資料</h1><p>更新您的公司及收款資料。</p></div>
+      <div style="max-width:560px;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6);box-shadow:var(--shadow-sm)">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">公司名稱</label><input class="form-input" id="prof-company" value="${s.company}"></div>
+          <div class="form-group"><label class="form-label">聯絡人</label><input class="form-input" id="prof-contact" value="${s.contact}"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">電郵</label><input class="form-input" id="prof-email" value="${s.email}"></div>
+          <div class="form-group"><label class="form-label">電話</label><input class="form-input" id="prof-phone" value="${s.phone||''}"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">BNI 分會</label><input class="form-input" value="${s.chapter}" readonly></div>
+          <div class="form-group"><label class="form-label">BNI 編號</label><input class="form-input" value="${s.bniId}" readonly></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">PayMe 號碼</label><input class="form-input" id="prof-payme" value="${s.payme||''}"></div>
+          <div class="form-group"><label class="form-label">轉數快識別碼</label><input class="form-input" id="prof-fps" value="${s.fps||''}"></div>
+        </div>
+        <button class="btn btn-primary" onclick="saveProfile()"><i data-lucide="save" style="width:16px;height:16px"></i> 儲存更改</button>
+      </div>`;
+    lucide.createIcons();
+  }
+}
+
+function saveProfile(){
+  const s=state.sellerUser;
+  s.company=document.getElementById('prof-company').value.trim();
+  s.contact=document.getElementById('prof-contact').value.trim();
+  s.email=document.getElementById('prof-email').value.trim();
+  s.phone=document.getElementById('prof-phone').value.trim();
+  s.payme=document.getElementById('prof-payme').value.trim();
+  s.fps=document.getElementById('prof-fps').value.trim();
+  showToast('資料已更新','success');
+}
+
+function renderOfferForm(offerId){
+  const o=offerId?getOffer(offerId):null;
+  return `
+    <div class="form-group"><label class="form-label">優惠標題 <span>*</span></label><input class="form-input" id="of-title" value="${o?o.title:''}" placeholder="例：全身按摩療程 8 折優惠"></div>
+    <div class="form-group"><label class="form-label">詳細描述 <span>*</span></label><textarea class="form-textarea" id="of-desc" placeholder="描述您的優惠，包括服務內容、適用對象等...">${o?o.desc:''}</textarea></div>
+    <div class="form-group"><label class="form-label">圖片網址</label><input class="form-input" id="of-image" value="${o?o.image:''}" placeholder="https://... （留空使用預設圖片）"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">原價（HK$）<span>*</span></label><input type="number" class="form-input" id="of-orig" value="${o?o.originalPrice:''}" placeholder="1000"></div>
+      <div class="form-group"><label class="form-label">優惠價（HK$）<span>*</span></label><input type="number" class="form-input" id="of-disc" value="${o?o.discountedPrice:''}" placeholder="800"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">折扣類別 <span>*</span></label>
+        <select class="form-select" id="of-type">
+          <option value="90" ${o&&o.discountType==='90'?'selected':''}>九折（90%）</option>
+          <option value="80" ${o&&o.discountType==='80'?'selected':''}>八折（80%）</option>
+          <option value="70" ${o&&o.discountType==='70'?'selected':''}>七折（70%）</option>
+          <option value="60" ${o&&(o.discountType==='60'||o.discountType==='coupon')&&!o.isCoupon?'selected':''}>七折以上（60% 或以下）</option>
+          <option value="coupon" ${o&&o.isCoupon?'selected':''}>現金券</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">截止日期</label><input type="date" class="form-input" id="of-expiry" value="${o?o.expiry:''}"></div>
+    </div>
+    <div class="form-group">
+      <label style="display:flex;align-items:center;gap:var(--space-2);cursor:pointer;font-size:var(--text-sm);font-weight:600">
+        <input type="checkbox" id="of-iscoupon" ${o&&o.isCoupon?'checked':''} style="width:16px;height:16px"> 這是現金券
+      </label>
+    </div>
+    <div class="form-group"><label class="form-label">條款及細則</label><textarea class="form-textarea" id="of-terms" style="min-height:70px" placeholder="適用條款，例如：每人限用一次，有效期 6 個月...">${o?o.terms:''}</textarea></div>`;
+}
+
+function openOfferEdit(offerId){
+  state.editingOfferId=offerId;
+  document.getElementById('offerEditTitle').textContent='編輯優惠';
+  document.getElementById('offerEditBody').innerHTML=renderOfferForm(offerId);
+  openModal('offerEditModal');
+}
+
+function saveOffer(){
+  const id=state.editingOfferId;
+  const o=getOffer(id);
+  if(!o){closeModal('offerEditModal');return;}
+  o.title=document.getElementById('of-title').value.trim();
+  o.desc=document.getElementById('of-desc').value.trim();
+  const img=document.getElementById('of-image').value.trim();
+  if(img) o.image=img;
+  o.originalPrice=parseFloat(document.getElementById('of-orig').value)||o.originalPrice;
+  o.discountedPrice=parseFloat(document.getElementById('of-disc').value)||o.discountedPrice;
+  o.discountType=document.getElementById('of-type').value;
+  o.isCoupon=document.getElementById('of-iscoupon').checked;
+  o.terms=document.getElementById('of-terms').value.trim();
+  o.expiry=document.getElementById('of-expiry').value;
+  closeModal('offerEditModal');
+  showSellerTab('offers');
+  showToast('優惠已更新','success');
+}
+
+function saveNewOfferFromTab(){
+  const title=document.getElementById('of-title').value.trim();
+  const desc=document.getElementById('of-desc').value.trim();
+  const orig=parseFloat(document.getElementById('of-orig').value);
+  const disc=parseFloat(document.getElementById('of-disc').value);
+  if(!title||!desc||!orig||!disc){showToast('請填寫所有必填欄位','error');return;}
+  const s=state.sellerUser;
+  const imgVal=document.getElementById('of-image').value.trim();
+  const newOffer={
+    id:genId('o'),sellerId:s.id,title,desc,
+    image:imgVal||`https://picsum.photos/seed/${Date.now()}/600/450`,
+    originalPrice:orig,discountedPrice:disc,
+    discountType:document.getElementById('of-type').value,
+    isCoupon:document.getElementById('of-iscoupon').checked,
+    terms:document.getElementById('of-terms').value.trim(),
+    expiry:document.getElementById('of-expiry').value||'2026-12-31',
+    status:'active',views:0,orders:0,createdAt:new Date().toISOString().split('T')[0]
+  };
+  DB.offers.push(newOffer);
+  s.postCount=(s.postCount||0)+1;
+  showSellerTab('offers');
+  showToast('優惠已刊登！（已記錄一次刊登費 HK$'+DB.settings.listingFee+'）','success');
+}
+
+function toggleOfferStatus(offerId){
+  const o=getOffer(offerId);
+  if(o) o.status=o.status==='active'?'inactive':'active';
+  showSellerTab('offers');
+  showToast('優惠狀態已更新');
+}
+
+// =============================================
+// ADMIN PORTAL
+// =============================================
+function showAdminPortal(){
+  showView('admin');
+  setActiveNav('nav-admin');
+  if(state.adminLoggedIn){
+    document.getElementById('adminLoginArea').style.display='none';
+    document.getElementById('adminDashArea').style.display='block';
+    showAdminTab(state.adminTab);
+  }
+}
+function doAdminLogin(){
+  const user=document.getElementById('adminUser').value;
+  const pass=document.getElementById('adminPass').value;
+  if(user==='admin'&&pass==='admin123'){
+    state.adminLoggedIn=true;
+    document.getElementById('adminLoginArea').style.display='none';
+    document.getElementById('adminDashArea').style.display='block';
+    showAdminTab('overview');
+    showToast('管理員登入成功','success');
+  }else{
+    showToast('帳號或密碼錯誤','error');
+  }
+}
+function doAdminLogout(){
+  state.adminLoggedIn=false;
+  document.getElementById('adminLoginArea').style.display='block';
+  document.getElementById('adminDashArea').style.display='none';
+  showToast('已登出管理後台');
+}
+
+function showAdminTab(tab){
+  state.adminTab=tab;
+  document.querySelectorAll('[id^="adash-"]').forEach(el=>el.classList.remove('active'));
+  const navEl=document.getElementById('adash-'+tab);
+  if(navEl) navEl.classList.add('active');
+  const content=document.getElementById('adminDashContent');
+  if(tab==='overview'){
+    const totalRevFromFees=DB.sellers.filter(s=>s.regFee==='paid').length*DB.settings.registrationFee+DB.sellers.reduce((a,s)=>a+s.postCount*DB.settings.listingFee,0);
+    content.innerHTML=`
+      <div class="dash-header"><h1>管理總覽</h1><p>BNI HK 優惠平台運營概況</p></div>
+      <div class="admin-kpi-grid">
+        <div class="kpi-card"><div class="kpi-label"><i data-lucide="users" style="width:14px;height:14px"></i> 賣家總數</div><div class="kpi-value">${DB.sellers.length}</div><div class="kpi-sub">${DB.sellers.filter(s=>s.status==='active').length} 已啟用</div></div>
+        <div class="kpi-card"><div class="kpi-label"><i data-lucide="tag" style="width:14px;height:14px"></i> 優惠總數</div><div class="kpi-value">${DB.offers.length}</div><div class="kpi-sub">${DB.offers.filter(o=>o.status==='active').length} 上架中</div></div>
+        <div class="kpi-card"><div class="kpi-label"><i data-lucide="shopping-bag" style="width:14px;height:14px"></i> 訂單總數</div><div class="kpi-value">${DB.orders.length}</div><div class="kpi-sub">${DB.orders.filter(o=>o.status==='paid').length} 已付款</div></div>
+        <div class="kpi-card"><div class="kpi-label"><i data-lucide="dollar-sign" style="width:14px;height:14px"></i> 應收費用（預估）</div><div class="kpi-value">HK$${totalRevFromFees.toLocaleString()}</div><div class="kpi-sub">登記費 + 刊登費</div></div>
+      </div>
+      <div class="table-wrap" style="margin-bottom:var(--space-6)">
+        <div class="table-header"><h3>待審核賣家</h3></div>
+        <table class="data-table">
+          <thead><tr><th>公司名稱</th><th>BNI 分會</th><th>登記費</th><th>月費</th><th>狀態</th></tr></thead>
+          <tbody>${DB.sellers.filter(s=>s.regFee==='unpaid'||s.status==='pending').map(s=>`
+            <tr><td>${s.company}</td><td>${s.chapter}</td>
+            <td><span class="status-badge ${s.regFee==='paid'?'status-paid':'status-unpaid'}">${s.regFee==='paid'?'已付':'待付'}</span></td>
+            <td><span class="status-badge ${s.monthFee==='paid'?'status-paid':'status-unpaid'}">${s.monthFee==='paid'?'已付':'待付'}</span></td>
+            <td><span class="status-badge ${s.status==='active'?'status-active':'status-pending'}">${s.status==='active'?'啟用':'待審'}</span></td>
+            </tr>`).join('')||'<tr><td colspan="5" style="text-align:center;padding:var(--space-6);color:var(--color-text-muted)">所有賣家已審核</td></tr>'}
+          </tbody>
+        </table>
+      </div>`;
+    lucide.createIcons();
+  } else if(tab==='sellers'){
+    content.innerHTML=`
+      <div class="dash-header"><h1>賣家管理</h1><p>管理所有 BNI 賣家帳號及費用狀態。</p></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>公司名稱</th><th>分會</th><th>帖子數</th><th>登記費</th><th>月費</th><th>狀態</th><th>操作</th></tr></thead>
+          <tbody>${DB.sellers.map(s=>`
+            <tr>
+              <td><div><strong>${s.company}</strong></div><div style="font-size:var(--text-xs);color:var(--color-text-muted)">${s.contact} · ${s.email}</div></td>
+              <td style="font-size:var(--text-sm)">${s.chapter}</td>
+              <td style="font-variant-numeric:tabular-nums">${s.postCount}</td>
+              <td><span class="status-badge ${s.regFee==='paid'?'status-paid':'status-unpaid'}">${s.regFee==='paid'?'已付':'待付'}</span></td>
+              <td><span class="status-badge ${s.monthFee==='paid'?'status-paid':'status-unpaid'}">${s.monthFee==='paid'?'已付':'待付'}</span></td>
+              <td><span class="status-badge ${s.status==='active'?'status-active':s.status==='pending'?'status-pending':'status-inactive'}">${s.status==='active'?'啟用':s.status==='pending'?'待審':'停用'}</span></td>
+              <td><button class="btn btn-sm btn-ghost" onclick="openSellerEdit('${s.id}')"><i data-lucide="edit-2" style="width:12px;height:12px"></i> 編輯</button></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`;
+    lucide.createIcons();
+  } else if(tab==='offers'){
+    content.innerHTML=`
+      <div class="dash-header"><h1>優惠管理</h1><p>審閱及管理所有賣家的優惠刊登。</p></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>優惠名稱</th><th>賣家</th><th>類別</th><th>折後價</th><th>瀏覽/訂單</th><th>狀態</th><th>操作</th></tr></thead>
+          <tbody>${DB.offers.map(o=>{const s=getSeller(o.sellerId)||{company:'—'};return`
+            <tr>
+              <td><strong>${o.title}</strong></td>
+              <td style="font-size:var(--text-sm)">${s.company}</td>
+              <td><span class="tag ${o.isCoupon?'tag-gold':'tag-primary'}" style="font-size:10px">${getDiscountLabel(o.discountType,o.isCoupon)}</span></td>
+              <td>${formatPrice(o.discountedPrice)}</td>
+              <td style="font-variant-numeric:tabular-nums">${o.views||0} / ${o.orders||0}</td>
+              <td><span class="status-badge ${o.status==='active'?'status-active':'status-inactive'}">${o.status==='active'?'上架':'下架'}</span></td>
+              <td><div style="display:flex;gap:var(--space-2)">
+                <button class="btn btn-sm btn-ghost" onclick="adminToggleOffer('${o.id}')">${o.status==='active'?'下架':'上架'}</button>
+              </div></td>
+            </tr>`}).join('')}
+          </tbody>
+        </table>
+      </div>`;
+    lucide.createIcons();
+  } else if(tab==='orders'){
+    content.innerHTML=`
+      <div class="dash-header"><h1>訂單紀錄</h1><p>所有買家訂單，可供日後分析。</p></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>訂單編號</th><th>買家</th><th>優惠</th><th>賣家</th><th>金額</th><th>狀態</th><th>日期</th></tr></thead>
+          <tbody>${DB.orders.map(ord=>{
+            const o=getOffer(ord.offerId)||{title:'已刪除'};
+            const s=getSeller(ord.sellerId)||{company:'—'};
+            return`<tr>
+              <td style="font-family:monospace;font-size:var(--text-xs)">${ord.id}</td>
+              <td><div>${ord.buyerName}</div><div style="font-size:var(--text-xs);color:var(--color-text-muted)">${ord.buyerEmail}</div></td>
+              <td style="font-size:var(--text-sm)">${o.title}</td>
+              <td style="font-size:var(--text-sm)">${s.company}</td>
+              <td style="font-weight:600;color:var(--color-primary)">${formatPrice(ord.totalAmount)}</td>
+              <td><span class="status-badge ${ord.status==='paid'?'status-order-paid':ord.status==='new'?'status-order-new':'status-pending'}">${ord.status==='paid'?'已付款':ord.status==='new'?'新訂單':'待確認'}</span></td>
+              <td style="font-size:var(--text-xs)">${fmtDate(ord.createdAt)}</td>
+            </tr>`}).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:var(--space-4);display:flex;gap:var(--space-3)">
+        <button class="btn btn-secondary" onclick="exportOrdersCSV()"><i data-lucide="download" style="width:14px;height:14px"></i> 導出 CSV</button>
+      </div>`;
+    lucide.createIcons();
+  } else if(tab==='settings'){
+    content.innerHTML=`
+      <div class="dash-header"><h1>系統設定</h1><p>管理平台費用及系統參數。</p></div>
+      <div class="settings-grid">
+        <div class="settings-card">
+          <h4><i data-lucide="dollar-sign"></i> 費用設定</h4>
+          <div class="form-group"><label class="form-label">登記費（HK$）</label>
+            <input type="number" class="form-input" id="set-regfee" value="${DB.settings.registrationFee}"></div>
+          <div class="form-group"><label class="form-label">月費（HK$）</label>
+            <input type="number" class="form-input" id="set-monthfee" value="${DB.settings.monthlyFee}"></div>
+          <div class="form-group"><label class="form-label">刊登費（每個帖子 HK$）</label>
+            <input type="number" class="form-input" id="set-listingfee" value="${DB.settings.listingFee}"></div>
+          <button class="btn btn-primary btn-sm" onclick="saveSettings()"><i data-lucide="save" style="width:14px;height:14px"></i> 儲存設定</button>
+        </div>
+        <div class="settings-card">
+          <h4><i data-lucide="file-text"></i> 月結報表</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-4)">根據現有資料生成賣家應付款清單。</p>
+          <button class="btn btn-secondary btn-sm" onclick="genMonthlyReport()"><i data-lucide="bar-chart-2" style="width:14px;height:14px"></i> 生成月結報表</button>
+        </div>
+        <div class="settings-card">
+          <h4><i data-lucide="message-circle"></i> 通知訊息樣板</h4>
+          <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-4)">快速複製 WhatsApp / 電郵通知文字。</p>
+          <button class="btn btn-secondary btn-sm" onclick="showNotifyTemplates()"><i data-lucide="copy" style="width:14px;height:14px"></i> 查看訊息樣板</button>
+        </div>
+      </div>
+      <div id="settingsExtra"></div>`;
+    lucide.createIcons();
+  }
+}
+
+function openSellerEdit(sellerId){
+  state.editingSellerId=sellerId;
+  const s=getSeller(sellerId);
+  document.getElementById('sellerEditBody').innerHTML=`
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">登記費狀態</label>
+        <select class="form-select" id="se-regfee">
+          <option value="paid" ${s.regFee==='paid'?'selected':''}>已付款</option>
+          <option value="unpaid" ${s.regFee!=='paid'?'selected':''}>待付款</option>
+        </select></div>
+      <div class="form-group"><label class="form-label">月費狀態</label>
+        <select class="form-select" id="se-monthfee">
+          <option value="paid" ${s.monthFee==='paid'?'selected':''}>已付款</option>
+          <option value="unpaid" ${s.monthFee!=='paid'?'selected':''}>待付款</option>
+        </select></div>
+    </div>
+    <div class="form-group"><label class="form-label">帳號狀態</label>
+      <select class="form-select" id="se-status">
+        <option value="active" ${s.status==='active'?'selected':''}>啟用</option>
+        <option value="pending" ${s.status==='pending'?'selected':''}>待審核</option>
+        <option value="inactive" ${s.status==='inactive'?'selected':''}>停用</option>
+      </select></div>
+    <div class="form-group"><label class="form-label">備註</label><textarea class="form-textarea" id="se-note" style="min-height:60px" placeholder="內部備註..."></textarea></div>`;
+  openModal('sellerEditModal');
+}
+
+function saveSellerEdit(){
+  const s=getSeller(state.editingSellerId);
+  if(s){
+    s.regFee=document.getElementById('se-regfee').value;
+    s.monthFee=document.getElementById('se-monthfee').value;
+    s.status=document.getElementById('se-status').value;
+  }
+  closeModal('sellerEditModal');
+  showAdminTab('sellers');
+  showToast('賣家資料已更新','success');
+}
+
+function adminToggleOffer(offerId){
+  const o=getOffer(offerId);
+  if(o) o.status=o.status==='active'?'inactive':'active';
+  showAdminTab('offers');
+  showToast('優惠狀態已更新');
+}
+
+function saveSettings(){
+  DB.settings.registrationFee=parseFloat(document.getElementById('set-regfee').value)||50;
+  DB.settings.monthlyFee=parseFloat(document.getElementById('set-monthfee').value)||200;
+  DB.settings.listingFee=parseFloat(document.getElementById('set-listingfee').value)||10;
+  showToast('設定已儲存','success');
+}
+
+function exportOrdersCSV(){
+  const rows=[['訂單編號','買家','電郵','電話','優惠','賣家','金額','狀態','付款參考','日期']];
+  DB.orders.forEach(ord=>{
+    const o=getOffer(ord.offerId)||{title:'—'};
+    const s=getSeller(ord.sellerId)||{company:'—'};
+    rows.push([ord.id,ord.buyerName,ord.buyerEmail,ord.buyerPhone||'',o.title,s.company,ord.totalAmount,ord.status,ord.payRef||'',ord.createdAt]);
+  });
+  const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='BNI_HK_Orders_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+  showToast('訂單 CSV 已下載','success');
+}
+
+function genMonthlyReport(){
+  const extra=document.getElementById('settingsExtra');
+  const rows=DB.sellers.map(s=>{
+    const listing=s.postCount*DB.settings.listingFee;
+    const reg=s.regFee==='unpaid'?DB.settings.registrationFee:0;
+    const month=s.monthFee==='unpaid'?DB.settings.monthlyFee:0;
+    const total=listing+reg+month;
+    return `<tr><td>${s.company}</td><td>${s.chapter}</td>
+      <td><span class="status-badge ${s.regFee==='paid'?'status-paid':'status-unpaid'}">${s.regFee==='paid'?'已付':'HK$'+DB.settings.registrationFee}</span></td>
+      <td><span class="status-badge ${s.monthFee==='paid'?'status-paid':'status-unpaid'}">${s.monthFee==='paid'?'已付':'HK$'+DB.settings.monthlyFee}</span></td>
+      <td>HK$${listing}</td>
+      <td style="font-weight:600;color:${total>0?'var(--color-error)':'var(--color-success)'}">${total>0?'HK$'+total:'無欠款'}</td>
+    </tr>`;
+  });
+  extra.innerHTML=`
+    <div class="table-wrap" style="margin-top:var(--space-6)">
+      <div class="table-header"><h3>📊 月結對賬表 — ${new Date().toLocaleDateString('zh-HK',{year:'numeric',month:'long'})}</h3></div>
+      <table class="data-table">
+        <thead><tr><th>公司名稱</th><th>分會</th><th>登記費</th><th>月費</th><th>刊登費</th><th>應付合計</th></tr></thead>
+        <tbody>${rows.join('')}</tbody>
+      </table>
+    </div>`;
+  lucide.createIcons();
+  showToast('月結報表已生成','success');
+}
+
+function showNotifyTemplates(){
+  const extra=document.getElementById('settingsExtra');
+  extra.innerHTML=`
+    <div style="margin-top:var(--space-6);display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--space-4)">
+      <div class="settings-card">
+        <h4 style="font-size:var(--text-sm)">📱 WhatsApp — 月費提醒</h4>
+        <textarea class="form-textarea" style="min-height:120px;font-size:var(--text-xs)" readonly>您好 [公司名稱]，
+感謝您成為 BNI 香港優惠平台賣家！
+本月月費 HK$${DB.settings.monthlyFee} 尚未收到，請盡快轉帳至：
+轉數快：[管理員 FPS]
+付款後請回覆截圖確認。謝謝！</textarea>
+      </div>
+      <div class="settings-card">
+        <h4 style="font-size:var(--text-sm)">📧 電郵 — 登記確認</h4>
+        <textarea class="form-textarea" style="min-height:120px;font-size:var(--text-xs)" readonly>主旨：BNI 香港優惠平台 — 賣家登記確認
+
+您好 [聯絡人姓名]，
+
+感謝您申請成為 BNI 香港優惠平台賣家！
+您的帳號已成功建立，登記費 HK$${DB.settings.registrationFee} 請轉帳至 [帳號] 完成啟用。
+
+如有查詢，歡迎聯絡我們。
+
+BNI HK 優惠平台 管理團隊</textarea>
+      </div>
+    </div>`;
+}
+
+// =============================================
+// MODAL HELPERS
+// =============================================
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click',e=>{if(e.target===m) m.classList.remove('open');});
+});
+
+// =============================================
+// THEME TOGGLE
+// =============================================
+(function(){
+  const t=document.querySelector('[data-theme-toggle]');
+  const r=document.documentElement;
+  let d=matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  r.setAttribute('data-theme',d);
+  if(t) t.addEventListener('click',()=>{
+    d=d==='dark'?'light':'dark';
+    r.setAttribute('data-theme',d);
+    t.setAttribute('aria-label','切換至'+(d==='dark'?'淺色':'深色')+'模式');
+    t.innerHTML=d==='dark'
+      ?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+      :'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  });
+})();
+
+// =============================================
+// INIT
+// =============================================
+document.addEventListener('DOMContentLoaded',()=>{
+  lucide.createIcons();
+  renderOffers();
+});
+</script>
+</body>
+</html>

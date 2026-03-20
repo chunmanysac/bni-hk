@@ -1,0 +1,45 @@
+{
+  "name": "BNI 香港會員專屬優惠平台",
+  "short_name": "BNI HK 優惠",
+  "description": "香港 BNI 各分會會員專屬優惠，九折至現金券，直接聯絡賣家交易。",
+  "start_url": "./bni-hk-platform.html",
+  "display": "standalone",
+  "background_color": "#f7f6f2",
+  "theme_color": "#01696f",
+  "orientation": "portrait-primary",
+  "lang": "zh-HK",
+  "categories": ["shopping", "business"],
+  "icons": [
+    {
+      "src": "https://user-gen-media-assets.s3.amazonaws.com/gemini_images/438860e9-f09a-4ec6-9614-aef88ddc451c.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://user-gen-media-assets.s3.amazonaws.com/gemini_images/438860e9-f09a-4ec6-9614-aef88ddc451c.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://user-gen-media-assets.s3.amazonaws.com/gemini_images/438860e9-f09a-4ec6-9614-aef88ddc451c.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "瀏覽優惠",
+      "url": "./bni-hk-platform.html",
+      "description": "瀏覽所有 BNI 會員優惠"
+    },
+    {
+      "name": "賣家後台",
+      "url": "./bni-hk-platform.html#seller",
+      "description": "賣家登入及管理優惠"
+    }
+  ]
+}
