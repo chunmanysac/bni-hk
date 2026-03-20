@@ -983,6 +983,21 @@ function submitOrder(offerId,qty,total,sellerId){
         <button class="btn btn-secondary" onclick="showView('home')">返回首頁</button>
         <button class="btn btn-primary" onclick="showOfferDetail('${offerId}')">查看優惠詳情</button>
       </div>
+                <div style="margin-top:var(--space-6);padding:var(--space-4);background:linear-gradient(135deg,#fff8e1,#fff3cd);border:1px solid #f0d060;border-radius:var(--radius-md)">
+            <h3 style="margin:0 0 var(--space-2);font-size:var(--text-md);color:#856404">📋 BNI 會員提醒</h3>
+            <p style="margin:0 0 var(--space-2);font-size:var(--text-sm);color:#856404;line-height:1.6">交易完成後，請記得到 BNI Connect 提交紀錄：</p>
+            <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+              <a href="https://www.bniconnectglobal.com" target="_blank" style="display:flex;align-items:center;gap:var(--space-2);padding:var(--space-3);background:#fff;border:1px solid #e0c960;border-radius:var(--radius-sm);text-decoration:none;color:#01696f;font-weight:600;font-size:var(--text-sm)">
+                <span style="font-size:20px">🙏</span>
+                <span><strong>賣家：</strong>提交 Thank You for Closed Business (TYFCB)</span>
+              </a>
+              <a href="https://www.bniconnectglobal.com" target="_blank" style="display:flex;align-items:center;gap:var(--space-2);padding:var(--space-3);background:#fff;border:1px solid #e0c960;border-radius:var(--radius-sm);text-decoration:none;color:#01696f;font-weight:600;font-size:var(--text-sm)">
+                <span style="font-size:20px">🤝</span>
+                <span><strong>買家：</strong>提交 Referral Slip 推薦紀錄</span>
+              </a>
+            </div>
+            <p style="margin:var(--space-2) 0 0;font-size:var(--text-xs);color:#a07800">提交 BNI slip 有助提升您的 PALMS 評分！</p>
+          </div>
     </div>`;
   showView('orderconfirm');
   lucide.createIcons();
