@@ -8,6 +8,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;700&family=Inter:wght@300..700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <style>
 /* ===== DESIGN TOKENS ===== */
 :root,[data-theme="light"]{
@@ -951,7 +954,7 @@ function goToCheckout(){
   lucide.createIcons();
 }
 
-function submitOrder(offerId,qty,total,sellerId){
+async function submitOrder(offerId,qty,total,sellerId){
   const name=document.getElementById('co-name').value.trim();
   const email=document.getElementById('co-email').value.trim();
   if(!name||!email){showToast('請填寫姓名及電郵','error');return;}
@@ -961,10 +964,12 @@ function submitOrder(offerId,qty,total,sellerId){
   const ordId=genId('ORD-');
   const newOrder={id:ordId,offerId,buyerName:name,buyerEmail:email,buyerPhone:phone,note,qty,totalAmount:total,status:payref?'paid':'new',payRef:payref,createdAt:new Date().toISOString().split('T')[0],sellerId};
   DB.orders.push(newOrder);
+      try{ await fbCreateOrder(newOrder); }catch(e){ console.warn('Firestore order sync:',e); }
   const seller=getSeller(sellerId)||{payme:'',fps:''};
   document.getElementById('orderConfirmContent').innerHTML=`
     <div style="max-width:560px;margin:0 auto;padding:var(--space-8) 0">
       <div style="text-align:center;margin-bottom:var(--space-8)">
+      
         <div style="width:64px;height:64px;border-radius:var(--radius-full);background:var(--color-success-highlight);display:flex;align-items:center;justify-content:center;margin:0 auto var(--space-4)">
           <i data-lucide="check-circle" style="width:32px;height:32px;color:var(--color-success)"></i>
         </div>
@@ -1013,23 +1018,26 @@ function showBuyerLoginModal(){
   }
   openModal('buyerLoginModal');
 }
-function doBuyerLogin(){
-  const email=document.getElementById('buyerEmail').value.trim();
-  const pass=document.getElementById('buyerPass').value;
-  const buyer=DB.buyers.find(b=>b.email===email&&b.password===pass);
-  if(buyer){
-    state.buyerUser=buyer;
-    closeModal('buyerLoginModal');
-    document.getElementById('nav-login').textContent='已登入';
-    showToast('買家登入成功！','success');
-  }else{
-    showToast('帳號或密碼錯誤','error');
+  async function doBuyerLogin(){
+    const email=document.getElementById('buyerEmail').value.trim();
+    const pass=document.getElementById('buyerPass').value;
+    if(!email||!pass){showToast('Please enter email and password','error');return;}
+    try{
+      const cred=await fbLogin(email,pass);
+      const buyerData=await fbGetBuyer(cred.user.uid);
+      if(buyerData){
+        state.buyerUser=buyerData;
+      }else{
+        state.buyerUser={id:cred.user.uid,name:cred.user.email,email:cred.user.email};
+      }
+      closeModal('buyerLoginModal');
+      document.getElementById('nav-login').textContent='Logged in';
+      showToast('Buyer login successful!','success');
+    }catch(e){
+      console.error('Buyer login error:',e);
+      showToast('Email or password incorrect','error');
+    }
   }
-}
-
-// =============================================
-// SELLER PORTAL
-// =============================================
 function showSellerPortal(){
   showView('seller');
   setActiveNav('nav-seller');
@@ -1052,47 +1060,66 @@ function showSellerRegister(){
   document.getElementById('sellerRegisterArea').style.display='block';
   document.getElementById('sellerDashArea').style.display='none';
 }
-function doSellerLogin(){
-  const email=document.getElementById('sellerLoginEmail').value.trim();
-  const pass=document.getElementById('sellerLoginPass').value;
-  if(email==='demo@bni.hk'&&pass==='password123'){
-    state.sellerUser=DB.sellers.find(s=>s.email==='demo@bni.hk');
-    document.getElementById('sellerLoginArea').style.display='none';
-    document.getElementById('sellerDashArea').style.display='block';
-    showSellerTab('overview');
-    showToast('歡迎回來，'+state.sellerUser.contact+'！','success');
-  }else{
-    showToast('帳號或密碼錯誤','error');
+async function doSellerLogin(){
+    const email=document.getElementById('sellerLoginEmail').value.trim();
+    const pass=document.getElementById('sellerLoginPass').value;
+    if(!email||!pass){showToast('Please enter email and password','error');return;}
+    try{
+      const cred=await fbLogin(email,pass);
+      const sellerData=await fbGetSeller(cred.user.uid);
+      if(sellerData){
+        state.sellerUser=sellerData;
+        document.getElementById('sellerLoginArea').style.display='none';
+        document.getElementById('sellerDashArea').style.display='block';
+        showSellerTab('overview');
+        showToast('Welcome back, '+state.sellerUser.contact+'!','success');
+      }else{
+        showToast('This account is not registered as a seller','error');
+        await fbLogout();
+      }
+    }catch(e){
+      console.error('Login error:',e);
+      showToast('Email or password incorrect: '+e.message,'error');
+    }
   }
-}
-function doSellerLogout(){
-  state.sellerUser=null;
-  showSellerLogin();
-  showToast('已登出');
-}
-function doSellerRegister(){
-  const company=document.getElementById('reg-company').value.trim();
-  const name=document.getElementById('reg-name').value.trim();
-  const email=document.getElementById('reg-email').value.trim();
-  const chapter=document.getElementById('reg-chapter').value;
-  const bniId=document.getElementById('reg-bniid').value.trim();
-  const pass=document.getElementById('reg-pass').value;
-  const pass2=document.getElementById('reg-pass2').value;
-  if(!company||!name||!email||!chapter||!bniId||!pass){showToast('請填寫所有必填欄位','error');return;}
-  if(pass!==pass2){showToast('兩次密碼不相符','error');return;}
-  const newSeller={
-    id:genId('s'),company,contact:name,email,phone:document.getElementById('reg-phone').value.trim(),
-    chapter,bniId,payme:document.getElementById('reg-payme').value.trim(),
-    fps:document.getElementById('reg-fps').value.trim(),
-    regFee:'unpaid',monthFee:'unpaid',postCount:0,status:'pending',joinDate:new Date().toISOString().split('T')[0],_pass:pass
-  };
-  DB.sellers.push(newSeller);
-  state.sellerUser=newSeller;
-  document.getElementById('sellerRegisterArea').style.display='none';
-  document.getElementById('sellerDashArea').style.display='block';
-  showSellerTab('overview');
-  showToast('註冊成功！請等待管理員審核。','success');
-}
+async function doSellerLogout(){
+    await fbLogout();
+    state.sellerUser=null;
+    showSellerLogin();
+    showToast('Logged out');
+  }
+async function doSellerRegister(){
+    const company=document.getElementById('reg-company').value.trim();
+    const name=document.getElementById('reg-name').value.trim();
+    const email=document.getElementById('reg-email').value.trim();
+    const chapter=document.getElementById('reg-chapter').value;
+    const bniId=document.getElementById('reg-bniid').value.trim();
+    const pass=document.getElementById('reg-pass').value;
+    const pass2=document.getElementById('reg-pass2').value;
+    if(!company||!name||!email||!chapter||!bniId||!pass){showToast('Please fill all required fields','error');return;}
+    if(pass!==pass2){showToast('Passwords do not match','error');return;}
+    if(pass.length<8){showToast('Password must be at least 8 characters','error');return;}
+    try{
+      const cred=await fbRegister(email,pass);
+      const sellerData={
+        company,contact:name,email,phone:document.getElementById('reg-phone').value.trim(),
+        chapter,bniId,payme:document.getElementById('reg-payme').value.trim(),
+        fps:document.getElementById('reg-fps').value.trim(),
+        regFee:'unpaid',monthFee:'unpaid',postCount:0,status:'pending',
+        joinDate:new Date().toISOString().split('T')[0]
+      };
+      await fbCreateSeller(cred.user.uid,sellerData);
+      state.sellerUser={id:cred.user.uid,...sellerData};
+      DB.sellers.push(state.sellerUser);
+      document.getElementById('sellerRegisterArea').style.display='none';
+      document.getElementById('sellerDashArea').style.display='block';
+      showSellerTab('overview');
+      showToast('Registration successful! Please wait for admin approval.','success');
+    }catch(e){
+      console.error('Register error:',e);
+      showToast('Registration failed: '+e.message,'error');
+    }
+  }
 
 function showSellerTab(tab){
   state.sellerTab=tab;
@@ -1265,7 +1292,7 @@ function saveOffer(){
   showToast('優惠已更新','success');
 }
 
-function saveNewOfferFromTab(){
+async function saveNewOfferFromTab(){
   const title=document.getElementById('of-title').value.trim();
   const desc=document.getElementById('of-desc').value.trim();
   const orig=parseFloat(document.getElementById('of-orig').value);
@@ -1287,9 +1314,9 @@ function saveNewOfferFromTab(){
   s.postCount=(s.postCount||0)+1;
   showSellerTab('offers');
   showToast('優惠已刊登！（已記錄一次刊登費 HK$'+DB.settings.listingFee+'）','success');
+      try{ await fbCreateOffer(newOffer); }catch(e){ console.warn('Firestore offer sync:',e); }
 }
-
-function toggleOfferStatus(offerId){
+          function toggleOfferStatus(offerId){
   const o=getOffer(offerId);
   if(o) o.status=o.status==='active'?'inactive':'active';
   showSellerTab('offers');
@@ -1669,6 +1696,31 @@ document.addEventListener('DOMContentLoaded',()=>{
     localStorage.setItem('pwaPromptDismissed',Date.now().toString());
   };
 })();
+</script>
+  <script src="firebase-sync.js"></script>
+<script>
+// Initialize Firebase and sync data on load
+document.addEventListener('DOMContentLoaded', async function() {
+  try {
+    await seedFirestore();
+    await syncDBFromFirestore();
+    renderOffers();
+    console.log('Firebase data loaded successfully');
+  } catch(e) {
+    console.warn('Firebase sync failed, using local data:', e);
+  }
+  
+  // Listen for auth state changes
+  auth.onAuthStateChanged(function(user) {
+    if (user) {
+      console.log('User signed in:', user.email);
+    } else {
+      console.log('User signed out');
+      state.sellerUser = null;
+      state.buyerUser = null;
+    }
+  });
+});
 </script>
 </body>
 </html>
