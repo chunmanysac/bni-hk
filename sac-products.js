@@ -106,7 +106,7 @@
 
   // Render product cards into the offers grid
   function renderSACProducts() {
-    const grid = document.getElementById('offers-grid');
+    const grid = document.getElementById('offersGrid');
     if (!grid) return;
     sacProducts.forEach((p, i) => {
       const card = document.createElement('div');
