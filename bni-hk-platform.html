@@ -1187,7 +1187,7 @@ function showSellerTab(tab){
             <button class="btn btn-secondary" onclick="downloadCSVTemplate()"><i data-lucide="download" style="width:16px;height:16px"></i> 下載 CSV 範本</button>
             <label class="btn btn-primary" style="cursor:pointer"><i data-lucide="upload" style="width:16px;height:16px"></i> 上傳 CSV 檔案<input type="file" id="csvFileInput" accept=".csv" onchange="handleCSVUpload(event)" style="display:none"></label>
           </div>
-          <div id="csvPreview" style="margin-top:var(--space-4)"></div>
+          <div id="csvPreview" style="margin-top:var(--space-4)"></div>             </div>             <div style="margin-top:var(--space-6);padding-top:var(--space-6);border-top:1px solid var(--color-divider)">               <h3 style="margin-bottom:var(--space-3)">Google Sheet 批量匯入</h3>               <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-4)">貼上已發佈的 Google Sheet 網址，系統會自動讀取並匯入所有優惠。請確保 Sheet 已設為「知道連結的任何人」可檢視。</p>               <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;align-items:flex-end">                 <div style="flex:1;min-width:200px"><label class="form-label">Google Sheet 網址</label><input class="form-input" id="gsheetUrl" placeholder="https://docs.google.com/spreadsheets/d/..."></div>                 <button class="btn btn-primary" onclick="handleGSheetImport()" style="white-space:nowrap"><i data-lucide="cloud-download" style="width:16px;height:16px"></i> 匯入 Google Sheet</button>               </div>               <div id="gsheetPreview" style="margin-top:var(--space-4)"></div>               <details style="margin-top:var(--space-3)">                 <summary style="font-size:var(--text-xs);color:var(--color-text-muted);cursor:pointer">查看 Google Sheet 格式說明</summary>                 <div style="font-size:var(--text-xs);color:var(--color-text-faint);margin-top:var(--space-2);line-height:1.6">                   <p>第一行為標題行，格式與 CSV 範本相同：</p>                   <code style="display:block;background:var(--color-surface-offset);padding:var(--space-2);border-radius:var(--radius-sm);margin-top:var(--space-1);word-break:break-all">優惠標題, 詳細描述, 圖片網址, 原價, 優惠價, 折扣類別, 是否現金券, 條款及細則, 截止日期</code>                 </div>               </details>
         </div>
       </div>`;
     lucide.createIcons();
@@ -1404,6 +1404,55 @@ async function saveNewOfferFromTab(){
         };
         reader.readAsText(file);
       }
+
+      // ===== GOOGLE SHEET IMPORT =====
+    async function handleGSheetImport(){
+      const url=document.getElementById('gsheetUrl').value.trim();
+      if(!url){showToast('請輸入 Google Sheet 網址','error');return;}
+      const preview=document.getElementById('gsheetPreview');
+      preview.innerHTML='<p style="color:var(--color-text-muted)">正在匯入...</p>';
+      try{
+        let sheetId='';
+        const m=url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+        if(m) sheetId=m[1];
+        else{showToast('無法識別 Google Sheet ID','error');preview.innerHTML='';return;}
+        const csvUrl='https://docs.google.com/spreadsheets/d/'+sheetId+'/export?format=csv';
+        const resp=await fetch(csvUrl);
+        if(!resp.ok) throw new Error('HTTP '+resp.status);
+        const text=await resp.text();
+        const lines=text.split('\n').filter(l=>l.trim());
+        if(lines.length<2){showToast('Google Sheet 無有效資料','error');preview.innerHTML='';return;}
+        const s=state.sellerUser;
+        let count=0;
+        for(let i=1;i<lines.length;i++){
+          const cols=lines[i].split(',');
+          if(cols.length<9) continue;
+          const newOffer={
+            id:genId('o'),sellerId:s.id,
+            title:cols[0].trim(),desc:cols[1].trim(),
+            image:cols[2].trim()||'https://picsum.photos/seed/'+Date.now()+i+'/600/450',
+            originalPrice:parseFloat(cols[3])||0,discountedPrice:parseFloat(cols[4])||0,
+            discountType:cols[5].trim()||'90',
+            isCoupon:cols[6].trim().toLowerCase()==='true',
+            terms:cols[7].trim(),expiry:cols[8].trim()||'2026-12-31',
+            status:'active',views:0,orders:0,
+            createdAt:new Date().toISOString().split('T')[0]
+          };
+          DB.offers.push(newOffer);
+          s.postCount=(s.postCount||0)+1;
+          try{await fbCreateOffer(newOffer);}catch(e){console.warn('GSheet Firestore sync:',e);}
+          count++;
+        }
+        document.getElementById('gsheetUrl').value='';
+        preview.innerHTML='<p style="color:var(--color-success)">成功匯入 '+count+' 個優惠</p>';
+        showSellerTab('offers');
+        showToast('成功從 Google Sheet 匯入 '+count+' 個優惠！','success');
+      }catch(e){
+        console.error('GSheet import error:',e);
+        preview.innerHTML='<p style="color:var(--color-error)">匯入失敗：'+e.message+'</p>';
+        showToast('Google Sheet 匯入失敗：'+e.message,'error');
+      }
+    }
 // =============================================
 // ADMIN PORTAL
 // =============================================
