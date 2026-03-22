@@ -2,7 +2,7 @@
 /* Version: 1.0 */
 /* Adds product category browsing with keyword-based auto-detection */
 
-document.addEventListener('DOMContentLoaded', function() {
+(function() {
 
   // ===== CATEGORY DEFINITIONS =====
   const CATEGORIES = [
@@ -327,4 +327,4 @@ document.addEventListener('DOMContentLoaded', function() {
   // Wait for DOM + offers to render
   setTimeout(init, 1500);
 
-});
+})();
